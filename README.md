@@ -4,10 +4,10 @@
 
 | Thông tin | Nội dung |
 |---|---|
-| Mã đề tài | *(cần bổ sung)* |
-| Sinh viên thực hiện | Nguyễn Thị Nhật Linh – MSSV: *(cần bổ sung)* (làm cá nhân) |
+| Mã đề tài | HKDN_MIS_00 |
+| Sinh viên thực hiện | Nguyễn Thị Nhật Linh – MSSV: 036305000092 |
 | Giảng viên hướng dẫn | ThS. Mai Ngọc Châu |
-| Cán bộ hướng dẫn tại doanh nghiệp | ThS. Nguyễn Ngọc Hương Trâm – CEO, Công ty Light Human |
+| Cán bộ hướng dẫn tại doanh nghiệp | ThS. Nguyễn Ngọc Hương Trâm – CEO Công ty Light Human |
 | Video báo cáo | *(cần bổ sung link YouTube)* |
 | Demo trực tuyến | https://nlinh1703.github.io/Bao-cao-thuc-tap-BA/Code/ |
 
