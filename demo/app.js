@@ -118,7 +118,7 @@ const NAV={
   hr:[['hr-tao-cv','Tạo CV','UC04'],['hr-sang-loc','Sàng lọc CV','UC05'],['hr-cv','CV của tôi','UC06'],['hr-commission','Commission của tôi','UC11']],
   ctv:[['ctv-nop-cv','Nộp CV','UC04'],['ctv-cv','CV đã nộp',''],['ctv-commission','Commission của tôi','UC11']],
   ngt:[['ngt-link','Link & khách hàng','UC12'],['ngt-commission','Commission của tôi','UC11']],
-  admin:[['ad-tai-khoan','Quản lý tài khoản','UC03'],['ad-cau-hinh','Cấu hình giá & commission','UC13'],['ad-dieu-chinh','Điều chỉnh Source/Screener','UC14'],['ad-bao-cao','Báo cáo','UC15'],['ad-cv','Tất cả CV',''],['ad-thong-bao','Nhật ký thông báo','']],
+  admin:[['ad-bao-cao','Báo cáo','UC15'],['ad-tai-khoan','Tài khoản','UC03'],['ad-cv','CV',''],['ad-dieu-chinh','Source/Screener','UC14'],['ad-cau-hinh','Cấu hình','UC13'],['ad-thong-bao','Thông báo','']],
   uv:[['uv-link','Trang link cá nhân','UC06']]
 };
 const ROLE_NAME={guest:'Khách truy cập',kh:'Khách hàng',hr:'HR',ctv:'CTV',ngt:'Người giới thiệu',admin:'Admin',uv:'Ứng viên'};
@@ -486,7 +486,7 @@ function toast(msg,isErr){
 const initials=n=>n.split(' ').filter(Boolean).slice(-2).map(w=>w[0]).join('').toUpperCase();
 function layout(){
   const top=document.getElementById('topbar'), shell=document.getElementById('shell');
-  const mode=S.route==='dang-nhap'||S.route==='dang-ky'?'auth':(PORTAL==='user'?'top':(PORTAL==='uv'?'bare':'side'));
+  const mode=S.route==='dang-nhap'||S.route==='dang-ky'?'auth':(PORTAL==='uv'?'bare':'top');
   document.body.dataset.layout=mode;
   if(top) top.hidden=mode!=='top';
 }
@@ -507,7 +507,7 @@ function renderSide(){
     const nav=items.filter(i=>i[0]!=='kh-gio');
     const n=S.cart.length;
     top.innerHTML=`<div class="tb-in">
-      <a class="tb-brand" href="#${items[0][0]}"><img src="assets/logo.png" alt="Light Human"><span>CV Marketplace</span></a>
+      <a class="tb-brand" href="#${items[0][0]}"><img src="assets/logo.png" alt="Light Human"><span>${PORTAL==='admin'?'Quản trị CV Marketplace':'CV Marketplace'}</span></a>
       <nav class="tb-nav" aria-label="Chức năng">${nav.map(([id,l])=>`<a href="#${id}" class="${S.route===id||(id==='kh-don-hang'&&S.route==='kh-thanh-toan')?'on':''}">${l}</a>`).join('')}</nav>
       <div class="tb-right">${S.role==='kh'?`<a class="tb-cart ${S.route==='kh-gio'?'on':''}" href="#kh-gio" aria-label="Giỏ CV">${ICON.cart}${n?`<b>${n}</b>`:''}</a>`:''}
         <details class="tb-user"><summary><span class="av">${initials(me?.name||'?')}</span><span class="tb-un">${esc(me?.name||'')}</span></summary>

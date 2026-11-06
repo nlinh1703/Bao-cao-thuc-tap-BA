@@ -425,3 +425,9 @@ tfoot td{background:var(--sunken);border-top:1px solid var(--line)}
 .sr{display:flex;justify-content:space-between}
 .sr.tot{border-top:1px solid var(--line);padding-top:10px;font-size:1.1rem}
 @media (max-width:900px){.cart2{grid-template-columns:minmax(0,1fr)}.sum{position:static}.ci{flex-wrap:wrap}}
+
+.field .tbq{flex:none}
+.tb-nav a{font-size:.95rem}
+@media (max-width:1100px){.tb-brand span{display:none}}
+
+.field .tbq input{border:0!important;box-shadow:none!important;padding:10px 0;background:transparent}
