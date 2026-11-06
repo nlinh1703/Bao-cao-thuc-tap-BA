@@ -51,10 +51,11 @@ function seed(){
     const phone='09'+String(10000000+((i*7919)%89999999)).slice(0,8).replace(/(\d{2})(\d{3})(\d{3})/,'$1 $2 $3');
     return {id:'cv'+(i+1),code,pos,name,birth:by,gender:g,area,exp,salary:sal,edu,strengths:str,industry:ind,
       phone,email:name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').split(' ').slice(-2).join('.')+'@gmail.com',
-      workStatus:i%3?'Đang đi làm':'Đang tìm việc',onboard:['01/12/2026','15/11/2026','Ngay'][i%3],
+      workStatus:i%3?'Đang đi làm':'Đang tìm việc',onboard:['Trong 1 tháng','Trong 2 tuần','Ngay'][i%3],
       source:src,screener:scr,status:status||'Đạt',otw,note:status==='Không đạt'?'Mức lương mong muốn cao hơn mặt bằng vị trí, thiếu kinh nghiệm phù hợp.':'',
       token:'u'+(73120+i*17),consent:true,created:'2026-'+(i<6?'09':'10')+'-'+String(5+i).padStart(2,'0'),otwBy:otw?'Ứng viên':null,otwAt:otw?'2026-10-12':null};
   });
+  cvs.forEach(c=>{if(c.status==='Chờ sàng lọc')Object.assign(c,{exp:null,salary:null,edu:'',strengths:'',industry:'',gender:'',birth:null,workStatus:'',onboard:'',memo:'Ứng viên còn nhu cầu, cần HR gọi xác nhận lương mong muốn'})});
   S={cfg,cfgLog:[{at:'2026-10-01',by:'Admin vận hành',text:'Giá 100.000 đ/CV · tối thiểu 5 CV · Source 3% · Screener 2% · Referral 5%'}],
      accounts,cvs,orders:[],payments:[],handovers:[],commissions:[],notis:[],attrLog:[],
      role:'guest',me:null,cart:[],route:'',uvToken:null,
@@ -283,7 +284,7 @@ VIEWS['kh-cv']=()=>{
 };
 function fullHTML(c,extra=''){
   return `<div class="drawer-h"><div><div class="code">${c.code}</div><h2>${esc(c.name)}</h2><div class="small muted">${POS[c.pos]} · ${pill(c.status)} ${otwPill(c)}</div></div><button class="btn sm" data-act="close">Đóng</button></div>
-  <dl class="kv"><dt>Số điện thoại</dt><dd>${c.phone}</dd><dt>Email</dt><dd>${esc(c.email)}</dd><dt>Giới tính / năm sinh</dt><dd>${c.gender} · ${c.birth}</dd><dt>Khu vực</dt><dd>${c.area}</dd><dt>Trình độ</dt><dd>${c.edu}</dd><dt>Kinh nghiệm</dt><dd>${c.exp?c.exp+' năm':'Chưa có'} · ${esc(c.industry)}</dd><dt>Điểm mạnh</dt><dd>${esc(c.strengths)||'—'}</dd><dt>Lương mong muốn</dt><dd>${c.salary} triệu</dd><dt>Có thể nhận việc</dt><dd>${c.onboard}</dd>
+  <dl class="kv"><dt>Số điện thoại</dt><dd>${c.phone}</dd><dt>Email</dt><dd>${esc(c.email)}</dd><dt>Giới tính / năm sinh</dt><dd>${c.gender||'—'} · ${c.birth||'—'}</dd><dt>Khu vực</dt><dd>${c.area}</dd><dt>Trình độ</dt><dd>${c.edu||'—'}</dd><dt>Kinh nghiệm</dt><dd>${c.exp!=null?(c.exp?c.exp+' năm':'Chưa có'):'—'} · ${esc(c.industry)||'—'}</dd><dt>Điểm mạnh</dt><dd>${esc(c.strengths)||'—'}</dd><dt>Lương mong muốn</dt><dd>${c.salary!=null?c.salary+' triệu':'—'}</dd><dt>Có thể nhận việc</dt><dd>${c.onboard||'—'}</dd>
   <dt>Source</dt><dd>${esc(acc(c.source)?.name||'—')}</dd><dt>Screener</dt><dd>${esc(acc(c.screener)?.name||'—')}</dd>${c.note?`<dt>Ghi chú sàng lọc</dt><dd>${esc(c.note)}</dd>`:''}<dt>File CV</dt><dd><span class="mono small">${c.code}_CV.pdf</span></dd></dl>${extra}`;
 }
 /* ---------- CV FORM (HR/CTV) ---------- */
@@ -584,6 +585,280 @@ VIEWS['kh-tim-kiem']=()=>{
   ${n?`<div class="cartbar"><div><b>${n} CV</b> trong giỏ · <span class="num">${fmt(n*S.cfg.price)}</span>${need?`<div class="small">Thêm ${need} CV nữa để đặt mua (tối thiểu ${S.cfg.minCV} CV/đơn)</div>`:'<div class="small">Đủ điều kiện đặt mua</div>'}</div><button class="btn gold" data-go="kh-gio">Xem giỏ CV</button></div>`:''}`;
 };
 
+/* ===================== UI v3: tìm kiếm & lọc cho mọi danh sách ===================== */
+const norm=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
+function F(k){S.ui.f=S.ui.f||{};return S.ui.f[k]||(S.ui.f[k]={})}
+const hit=(k,...fields)=>{const q=norm(F(k).q||'').trim();return !q||norm(fields.join(' ')).includes(q)};
+const eq=(k,f,v)=>!F(k)[f]||F(k)[f]===String(v);
+const opt=a=>a.map(x=>Array.isArray(x)?x:[x,x]);
+const POS_O=()=>Object.entries(POS);
+const sortBy=(k,list,dateFn)=>{const s=F(k).sort||'new';return [...list].sort((a,b)=>s==='new'?String(dateFn(b)).localeCompare(dateFn(a)):String(dateFn(a)).localeCompare(dateFn(b)))};
+function toolbar(k,{q='Tìm kiếm…',sel=[],sort=false,n=null}){
+  const f=F(k), any=f.q||sel.some(([fd])=>f[fd]);
+  return `<div class="toolbar"><label class="tbq">${ICON.search}<input id="f-${k}-q" data-f="${k}.q" value="${esc(f.q||'')}" placeholder="${q}" aria-label="Tìm kiếm"></label>
+  ${sel.map(([fd,label,os])=>`<select id="f-${k}-${fd}" data-f="${k}.${fd}" aria-label="${label}" class="${f[fd]?'on':''}"><option value="">${label}</option>${opt(os).map(([v,t])=>`<option value="${esc(v)}" ${String(f[fd]||'')===String(v)?'selected':''}>${esc(t)}</option>`).join('')}</select>`).join('')}
+  ${sort?`<select id="f-${k}-sort" data-f="${k}.sort" aria-label="Sắp xếp"><option value="new" ${(f.sort||'new')==='new'?'selected':''}>Mới nhất</option><option value="old" ${f.sort==='old'?'selected':''}>Cũ nhất</option></select>`:''}
+  <span class="tbn">${n!==null?`<b>${n}</b> kết quả`:''}${any?` · <button class="link" data-act="f-clear" data-v="${k}">Xóa lọc</button>`:''}</span></div>`;
+}
+const noRes=(t='Không có kết quả phù hợp',d='Thử từ khóa khác hoặc bỏ bớt bộ lọc.')=>`<div class="empty2">${ICON.search}<h3>${t}</h3><p class="muted">${d}</p></div>`;
+const peopleOpts=roles=>S.accounts.filter(a=>roles.includes(a.role)).map(a=>[a.id,a.name]);
+const STATUS_O=['Chờ sàng lọc','Đạt','Không đạt'];
+const OTW_O=[['on','Đang bật Open to Work'],['off','Đã tắt / chờ bật']];
+const otwOk=(k,c)=>!F(k).otw||(F(k).otw==='on'?c.otw&&c.status==='Đạt':!(c.otw&&c.status==='Đạt'));
+const ageDays=d=>Math.max(0,Math.floor((Date.now()-Date.parse(d))/864e5));
+
+/* ---- Khách hàng ---- */
+VIEWS['kh-don-hang']=()=>{
+  const k='orders'; const all=S.orders.filter(o=>o.customer===S.me);
+  const os=sortBy(k,all.filter(o=>hit(k,o.id,o.items.map(i=>cvById(i.cv).code).join(' '))&&eq(k,'st',o.status)),o=>o.created);
+  return head('UC10','Đơn hàng của tôi','Đơn ở trạng thái Chờ thanh toán được thanh toán trực tuyến qua cổng thanh toán.')+
+  (all.length?toolbar(k,{q:'Tìm theo mã đơn hoặc mã CV',sel:[['st','Tất cả trạng thái',['Chờ thanh toán','Đã thanh toán']]],sort:true,n:os.length})+
+  (os.length?`<div class="tw"><table><thead><tr><th>Mã đơn</th><th>Ngày tạo</th><th>CV trong đơn</th><th class="r">Tổng tiền</th><th>Trạng thái</th><th></th></tr></thead><tbody>
+  ${os.map(o=>{const fails=S.payments.filter(p=>p.order===o.id&&p.status==='Thất bại').length;return `<tr><td class="mono">${o.id}</td><td class="num">${dshow(o.created)}</td><td class="small mono">${o.items.map(i=>cvById(i.cv).code).join(', ')}</td><td class="r num">${fmt(o.total)}</td><td>${pill(o.status)}${fails?`<div class="small muted">${fails} lần thanh toán chưa thành công</div>`:''}</td>
+  <td class="r">${o.status==='Chờ thanh toán'?`<button class="btn pri sm" data-act="pay" data-id="${o.id}">${fails?'Thanh toán lại':'Thanh toán'}</button>`:`<button class="link small" data-go="kh-cv">Xem CV</button>`}</td></tr>`}).join('')}</tbody></table></div>`:noRes())
+  :`<div class="empty2">${ICON.cart}<h3>Bạn chưa có đơn hàng nào</h3><p class="muted">Chọn CV phù hợp và đặt mua để bắt đầu.</p><button class="btn pri" data-go="kh-tim-kiem">Tìm CV ngay</button></div>`);
+};
+VIEWS['kh-cv']=()=>{
+  const k='owned'; const all=S.handovers.filter(h=>h.customer===S.me);
+  const hs=sortBy(k,all.filter(h=>{const c=cvById(h.cv);return hit(k,c.code,c.name,c.phone,c.email,POS[c.pos])&&eq(k,'pos',c.pos)&&eq(k,'area',c.area)&&eq(k,'order',h.order)}),h=>h.at);
+  return head('UC09','CV đã mua','Thông tin đầy đủ và file CV của các ứng viên bạn đã thanh toán.')+
+  (all.length?toolbar(k,{q:'Tìm theo tên, SĐT, email hoặc mã CV',sel:[['pos','Tất cả vị trí',POS_O()],['area','Tất cả khu vực',AREAS],['order','Tất cả đơn hàng',[...new Set(all.map(h=>h.order))]]],sort:true,n:hs.length})+
+  (hs.length?`<div class="tw"><table><thead><tr><th>Ứng viên</th><th>Vị trí</th><th>Liên hệ</th><th>Đơn hàng</th><th>Ngày nhận</th><th></th></tr></thead><tbody>
+  ${hs.map(h=>{const c=cvById(h.cv);return `<tr><td><b>${esc(c.name)}</b><div class="small muted mono">${c.code}</div></td><td>${POS[c.pos]}<div class="small muted">${c.area}</div></td><td class="small">${c.phone}<br>${esc(c.email)}</td><td class="mono small">${h.order}</td><td class="num">${dshow(h.at)}</td><td class="r"><div class="row" style="justify-content:flex-end"><button class="btn sm" data-act="full" data-id="${c.id}">Xem CV</button><button class="btn sm ghost" data-act="dl" data-id="${c.id}">Tải file</button></div></td></tr>`}).join('')}
+  </tbody></table></div>`:noRes()):`<div class="empty2">${ICON.search}<h3>Chưa có CV nào</h3><p class="muted">CV sẽ xuất hiện ở đây ngay sau khi đơn hàng thanh toán thành công.</p><button class="btn pri" data-go="kh-tim-kiem">Tìm CV</button></div>`);
+};
+
+/* ---- bảng CV dùng chung (HR, CTV, Admin) ---- */
+function cvList(k,base,{who=false,mine=false,actions='',q='Tìm theo mã CV, tên, SĐT hoặc email'}={}){
+  const list=sortBy(k,base.filter(c=>hit(k,c.code,c.name,c.phone,c.email,c.industry)&&eq(k,'pos',c.pos)&&eq(k,'area',c.area)&&eq(k,'st',c.status)&&otwOk(k,c)&&eq(k,'src',c.source)
+    &&(!F(k).mine||(F(k).mine==='src'?c.source===S.me:c.screener===S.me))),c=>c.created);
+  const sel=[['pos','Tất cả vị trí',POS_O()],['area','Tất cả khu vực',AREAS],['st','Tất cả kết quả sàng lọc',STATUS_O],['otw','Open to Work',OTW_O]];
+  if(who) sel.push(['src','Tất cả người nộp',peopleOpts(['hr','ctv'])]);
+  if(mine) sel.push(['mine','Vai trò của tôi',[['src','Tôi tạo nguồn'],['scr','Tôi sàng lọc']]]);
+  return toolbar(k,{q,sel,sort:true,n:list.length})+(list.length?`<div class="tw"><table><thead><tr><th>Ứng viên</th><th>Vị trí</th>${who?'<th>Người nộp</th>':''}<th>Ngày nộp</th><th>Sàng lọc</th><th>Open to Work</th><th class="r">Lượt bán</th><th></th></tr></thead><tbody>
+  ${list.map(c=>`<tr><td><b>${esc(c.name)}</b><div class="small muted mono">${c.code}</div></td><td>${POS[c.pos]}<div class="small muted">${c.area}</div></td>${who?`<td>${esc(acc(c.source)?.name||'—')}<div class="small muted">${ROLE_NAME[acc(c.source)?.role]||''}</div></td>`:''}<td class="num">${dshow(c.created)}</td><td>${pill(c.status)}</td><td>${otwPill(c)}</td><td class="r num">${S.handovers.filter(h=>h.cv===c.id).length}</td><td class="r">${actions.replace(/\{id\}/g,c.id)}</td></tr>`).join('')}
+  </tbody></table></div>`:noRes());
+}
+VIEWS['ctv-cv']=()=>head('','CV đã nộp','Theo dõi kết quả sàng lọc và trạng thái Open to Work của CV bạn đã nộp.')+cvList('ctvcv',S.cvs.filter(c=>c.source===S.me),{actions:'<button class="btn sm" data-act="full" data-id="{id}">Xem</button>'});
+VIEWS['hr-cv']=()=>head('UC06','CV của tôi','CV bạn tạo nguồn hoặc đã sàng lọc. Có thể cập nhật Open to Work thay ứng viên sau khi đã liên hệ xác nhận.')+cvList('hrcv',S.cvs.filter(c=>c.source===S.me||c.screener===S.me),{mine:true,actions:'<button class="btn sm" data-act="hr-open" data-id="{id}">Chi tiết</button>'});
+VIEWS['ad-cv']=()=>head('','Tất cả CV','Toàn bộ CV trong hệ thống, kèm thông tin đầy đủ.')+cvList('adcv',S.cvs,{who:true,actions:'<button class="btn sm" data-act="full" data-id="{id}">Xem</button>'});
+
+/* ---- Sàng lọc CV (HR) ---- */
+const CRITERIA=['Đã liên hệ được ứng viên qua điện thoại hoặc Zalo','Thông tin trên CV khớp với trao đổi thực tế','Ứng viên xác nhận vẫn đang tìm việc và đồng ý chia sẻ hồ sơ'];
+const REJECT=['Kinh nghiệm chưa phù hợp với vị trí','Mức lương mong muốn chưa phù hợp','Không liên hệ được ứng viên','Thông tin CV không chính xác','Ứng viên không còn nhu cầu tìm việc','Lý do khác'];
+VIEWS['hr-sang-loc']=()=>{
+  const tab=S.ui.slTab||'wait';
+  const wait=S.cvs.filter(c=>c.status==='Chờ sàng lọc'), done=S.cvs.filter(c=>c.status!=='Chờ sàng lọc'&&c.screener===S.me);
+  const tabs=`<div class="tabs" role="tablist"><button role="tab" class="${tab==='wait'?'on':''}" aria-selected="${tab==='wait'}" data-act="sl-tab" data-v="wait">Chờ sàng lọc <span class="cnt">${wait.length}</span></button><button role="tab" class="${tab==='done'?'on':''}" aria-selected="${tab==='done'}" data-act="sl-tab" data-v="done">Tôi đã sàng lọc <span class="cnt">${done.length}</span></button></div>`;
+  const hd=head('UC05','Sàng lọc CV','Xem đầy đủ hồ sơ, đánh giá theo tiêu chí và ghi nhận kết quả. CV đạt sẽ được gửi link để ứng viên bật Open to Work.');
+  if(tab==='done'){
+    const k='sldone';const list=sortBy(k,done.filter(c=>hit(k,c.code,c.name,c.phone,c.note)&&eq(k,'st',c.status)&&eq(k,'pos',c.pos)),c=>c.screenedAt||c.created);
+    return hd+tabs+toolbar(k,{q:'Tìm theo tên, mã CV hoặc ghi chú',sel:[['st','Tất cả kết quả',['Đạt','Không đạt']],['pos','Tất cả vị trí',POS_O()]],sort:true,n:list.length})+
+    (list.length?`<div class="tw"><table><thead><tr><th>Ứng viên</th><th>Vị trí</th><th>Ngày sàng lọc</th><th>Kết quả</th><th>Lý do / ghi chú</th><th>Open to Work</th><th></th></tr></thead><tbody>
+    ${list.map(c=>`<tr><td><b>${esc(c.name)}</b><div class="small muted mono">${c.code}</div></td><td>${POS[c.pos]}</td><td class="num">${dshow(c.screenedAt||c.created)}</td><td>${pill(c.status)}</td><td class="small">${c.reason?`<b>${esc(c.reason)}</b><br>`:''}${esc(c.note)||'—'}</td><td>${otwPill(c)}</td><td class="r"><button class="btn sm" data-act="hr-open" data-id="${c.id}">Chi tiết</button></td></tr>`).join('')}</tbody></table></div>`:noRes());
+  }
+  const k='slwait';
+  const list=[...wait.filter(c=>hit(k,c.code,c.name,c.phone,c.email,c.industry)&&eq(k,'pos',c.pos)&&eq(k,'area',c.area)&&(!F(k).by||acc(c.source)?.role===F(k).by))].sort((a,b)=>(F(k).sort==='new')?b.created.localeCompare(a.created):a.created.localeCompare(b.created));
+  if(!wait.length) return hd+tabs+`<div class="empty2">${ICON.ok}<h3>Đã sàng lọc hết CV</h3><p class="muted">Hiện không còn CV nào chờ sàng lọc.</p></div>`;
+  const selId=list.some(c=>c.id===S.ui.slSel)?S.ui.slSel:list[0]?.id; const c=selId&&cvById(selId);
+  const src=c&&acc(c.source); const dup=c&&S.cvs.find(x=>x.id!==c.id&&(x.phone.replace(/\s/g,'')===c.phone.replace(/\s/g,'')||x.email.toLowerCase()===c.email.toLowerCase()));
+  const f=S.ui.slForm||{};
+  return hd+tabs+`<div class="toolbar"><label class="tbq">${ICON.search}<input id="f-${k}-q" data-f="${k}.q" value="${esc(F(k).q||'')}" placeholder="Tìm theo tên, SĐT, email hoặc mã CV" aria-label="Tìm kiếm"></label>
+   <select id="f-${k}-pos" data-f="${k}.pos" aria-label="Vị trí"><option value="">Tất cả vị trí</option>${POS_O().map(([v,t])=>`<option value="${v}" ${F(k).pos===v?'selected':''}>${t}</option>`).join('')}</select>
+   <select id="f-${k}-area" data-f="${k}.area" aria-label="Khu vực"><option value="">Tất cả khu vực</option>${AREAS.map(a=>`<option ${F(k).area===a?'selected':''}>${a}</option>`).join('')}</select>
+   <select id="f-${k}-by" data-f="${k}.by" aria-label="Người nộp"><option value="">HR và CTV</option><option value="hr" ${F(k).by==='hr'?'selected':''}>Do HR tạo</option><option value="ctv" ${F(k).by==='ctv'?'selected':''}>Do CTV nộp</option></select>
+   <select id="f-${k}-sort" data-f="${k}.sort" aria-label="Sắp xếp"><option value="old" ${F(k).sort!=='new'?'selected':''}>Chờ lâu nhất trước</option><option value="new" ${F(k).sort==='new'?'selected':''}>Mới nộp trước</option></select>
+   <span class="tbn"><b>${list.length}</b>/${wait.length} CV</span></div>
+  ${list.length?`<div class="sl"><aside class="sl-list" aria-label="CV chờ sàng lọc">${list.map(x=>{const d=ageDays(x.created);return `<button class="sl-item ${x.id===selId?'on':''}" data-act="sl-pick" data-id="${x.id}"><span class="av">${initials(x.name)}</span><span class="sl-it"><b>${esc(x.name)}</b><span class="small muted">${POS[x.pos]} · ${x.area}</span><span class="small muted">${ROLE_NAME[acc(x.source)?.role]} ${esc(acc(x.source)?.name)}</span></span><span class="wait ${d>=3?'late':''}">${d===0?'Hôm nay':d+' ngày'}</span></button>`}).join('')}</aside>
+  <section class="sl-detail panel">
+    <div class="sl-h"><div><div class="small muted mono">${c.code} · nộp ${dshow(c.created)} · chờ ${ageDays(c.created)} ngày</div><h2>${esc(c.name)}</h2><div class="muted">${POS[c.pos]} · ${esc(c.industry)}</div></div>${pill(c.status)}</div>
+    ${dup?notice('warn','Có thể trùng ứng viên',`SĐT hoặc email trùng với hồ sơ <b>${dup.code}</b> (${esc(dup.name)}). Kiểm tra trước khi đánh giá.`):notice('ok','Không phát hiện hồ sơ trùng','Đã đối chiếu số điện thoại và email với toàn bộ CV trong hệ thống.')}
+    <div class="sl-grid">
+      <div><h3>Thông tin cá nhân</h3><dl class="kv2"><dt>Giới tính</dt><dd>${c.gender}</dd><dt>Năm sinh</dt><dd>${c.birth} (${2026-c.birth} tuổi)</dd><dt>Số điện thoại</dt><dd>${c.phone}</dd><dt>Email</dt><dd>${esc(c.email)}</dd><dt>Khu vực</dt><dd>${c.area}</dd></dl></div>
+      <div><h3>Kinh nghiệm & mong muốn</h3><dl class="kv2"><dt>Trình độ</dt><dd>${c.edu}</dd><dt>Kinh nghiệm</dt><dd>${c.exp?c.exp+' năm':'Chưa có'} · ${esc(c.industry)}</dd><dt>Lương mong muốn</dt><dd>${c.salary} triệu</dd><dt>Hiện tại</dt><dd>${c.workStatus}</dd><dt>Có thể nhận việc</dt><dd>${c.onboard}</dd></dl></div>
+      <div class="span2"><h3>Điểm mạnh</h3><p>${esc(c.strengths)||'<span class="muted">Chưa cập nhật</span>'}</p></div>
+      <div class="span2"><h3>Nguồn hồ sơ</h3><p>${ROLE_NAME[src?.role]} <b>${esc(src?.name)}</b> · ${esc(src?.email)} · ${c.consent?'<span class="pill p-ok">Ứng viên đã đồng ý chia sẻ</span>':'<span class="pill p-bad">Chưa có đồng ý chia sẻ</span>'}</p></div>
+    </div>
+    <div class="cvfile"><div class="cvf-h"><span>📄 ${c.code}_CV.pdf</span><button class="link small" data-act="dl" data-id="${c.id}">Tải xuống</button></div>
+      <div class="cvf-page"><div class="cvf-name">${esc(c.name).toUpperCase()}</div><div class="cvf-sub">${POS[c.pos]} · ${c.phone} · ${esc(c.email)}</div><div class="cvf-l"></div><div class="cvf-sec">Kinh nghiệm</div><div class="cvf-line w80"></div><div class="cvf-line w60"></div><div class="cvf-line w70"></div><div class="cvf-sec">Học vấn</div><div class="cvf-line w50"></div><div class="cvf-line w40"></div><div class="small muted center" style="margin-top:8px">Bản xem trước minh họa</div></div></div>
+    <form class="stack sl-form" data-form="screen2" data-id="${c.id}">
+      <h3>Đánh giá <span class="small muted" style="font-weight:400">· tiêu chí mẫu, cần xác nhận với HR</span></h3>
+      <div class="crit">${CRITERIA.map((t,i)=>`<label class="check"><input type="checkbox" name="cr" value="${i}" ${f.cr?.includes(String(i))?'checked':''}><span>${t}</span></label>`).join('')}</div>
+      <div class="seg2" role="radiogroup" aria-label="Kết quả"><label><input type="radio" name="res" value="Đạt" ${f.res==='Đạt'?'checked':''}><span>${ICON.ok} Đạt</span></label><label><input type="radio" name="res" value="Không đạt" ${f.res==='Không đạt'?'checked':''}><span>${ICON.err} Không đạt</span></label></div>
+      <div class="field" ${f.res==='Không đạt'?'':'hidden'} id="rejWrap"><label for="slReason">Lý do không đạt</label><select id="slReason"><option value="">Chọn lý do</option>${REJECT.map(r=>`<option ${f.reason===r?'selected':''}>${r}</option>`).join('')}</select></div>
+      <div class="field"><label for="slNote">Ghi chú cho hồ sơ</label><textarea id="slNote" placeholder="Nhận xét thêm về ứng viên (không bắt buộc khi Đạt)">${esc(f.note||'')}</textarea></div>
+      <div id="slErr"></div>
+      <div class="row"><button class="btn pri">Lưu kết quả</button><span class="small muted">CV đạt sẽ được gửi link cá nhân qua Zalo OA / Email</span></div>
+    </form>
+  </section></div>`:noRes()}`;
+};
+
+/* ---- Commission ---- */
+function commissionView(){
+  const k='com', mine=S.commissions.filter(x=>x.account===S.me);
+  const months=[...new Set(mine.map(x=>x.at.slice(0,7)))].sort().reverse();
+  const list=sortBy(k,mine.filter(x=>{const o=S.orders.find(o=>o.id===x.order);return hit(k,x.order,x.cv?cvById(x.cv).code:'',acc(o.customer).name)&&eq(k,'role',x.role)&&(!F(k).m||x.at.startsWith(F(k).m))}),x=>x.at);
+  const sum=arr=>arr.reduce((a,b)=>a+b.amount,0);
+  return head('UC11','Commission của tôi','Commission được tạo tự động ngay khi đơn hàng thanh toán thành công. Mỗi vai trò trên cùng một CV được tính riêng.')+
+  `<div class="kpis"><div class="kpi"><div class="k">Tổng commission</div><div class="v price">${fmt(sum(mine))}</div><div class="s">${mine.length} khoản</div></div>
+  ${['Source','Screener','Referral'].map(r=>`<div class="kpi"><div class="k">${r}</div><div class="v">${fmt(sum(mine.filter(x=>x.role===r)))}</div><div class="s">${mine.filter(x=>x.role===r).length} khoản</div></div>`).join('')}</div>`+
+  (mine.length?toolbar(k,{q:'Tìm theo mã đơn, mã CV hoặc khách hàng',sel:[['role','Tất cả vai trò',[...new Set(mine.map(x=>x.role))]],['m','Tất cả các tháng',months.map(m=>[m,'Tháng '+(+m.slice(5))+'/'+m.slice(0,4)])]],sort:true,n:list.length})+
+  (list.length?`<div class="tw"><table><thead><tr><th>Ngày</th><th>Đơn hàng</th><th>CV / Khách hàng</th><th>Vai trò</th><th class="r">Tỷ lệ</th><th class="r">Số tiền</th></tr></thead><tbody>
+  ${list.map(x=>{const o=S.orders.find(o=>o.id===x.order);return `<tr><td class="num">${dshow(x.at)}</td><td class="mono">${x.order}</td><td>${x.cv?`<span class="mono">${cvById(x.cv).code}</span> <span class="small muted">· ${esc(acc(o.customer).name)}</span>`:esc(acc(o.customer).name)}</td><td>${pill(x.role)}</td><td class="r num">${x.rate}%</td><td class="r num">${fmt(x.amount)}</td></tr>`}).join('')}
+  </tbody><tfoot><tr><td colspan="5"><b>Tổng theo bộ lọc</b></td><td class="r num"><b>${fmt(sum(list))}</b></td></tr></tfoot></table></div>`:noRes())
+  :`<div class="empty2">${ICON.info}<h3>Chưa có commission</h3><p class="muted">Commission sẽ xuất hiện khi CV bạn đóng góp được bán.</p></div>`);
+}
+VIEWS['hr-commission']=commissionView;VIEWS['ctv-commission']=commissionView;VIEWS['ngt-commission']=commissionView;
+
+/* ---- Người giới thiệu ---- */
+const _ngt=VIEWS['ngt-link'];
+VIEWS['ngt-link']=()=>{
+  const html=_ngt(); const i=html.indexOf('<div class="tw">'); const me=acc(S.me);
+  const k='refc', all=S.accounts.filter(a=>a.refBy===S.me);
+  const rows=all.map(c=>{const first=S.orders.filter(o=>o.customer===c.id&&o.status==='Đã thanh toán').slice(-1)[0];const com=S.commissions.find(x=>x.role==='Referral'&&x.account===S.me&&S.orders.find(o=>o.id===x.order).customer===c.id);return {c,first,com}})
+    .filter(r=>hit(k,r.c.name,r.c.email)&&(!F(k).buy||(F(k).buy==='y'?!!r.first:!r.first)));
+  const list=sortBy(k,rows,r=>r.c.created);
+  return html.slice(0,i)+`<h2 style="margin-top:6px">Khách hàng đã giới thiệu</h2>`+toolbar(k,{q:'Tìm theo tên doanh nghiệp hoặc email',sel:[['buy','Tất cả khách hàng',[['y','Đã mua'],['n','Chưa mua']]]],sort:true,n:list.length})+
+  (list.length?`<div class="tw"><table><thead><tr><th>Khách hàng</th><th>Ngày đăng ký</th><th>Đơn đầu tiên</th><th class="r">Hoa hồng Referral</th></tr></thead><tbody>
+  ${list.map(({c,first,com})=>`<tr><td><b>${esc(c.name)}</b><div class="small muted">${esc(c.email)}</div></td><td class="num">${dshow(c.created)}</td><td>${first?`<span class="mono">${first.id}</span> · ${dshow(first.paidAt)}`:'<span class="pill p-neutral">Chưa mua</span>'}</td><td class="r num">${com?fmt(com.amount):'—'}</td></tr>`).join('')}</tbody></table></div>`
+  :all.length?noRes():`<div class="empty2">${ICON.info}<h3>Chưa có khách hàng</h3><p class="muted">Gửi link giới thiệu cho doanh nghiệp để bắt đầu.</p></div>`);
+};
+
+/* ---- Admin ---- */
+const _adAcc=VIEWS['ad-tai-khoan'];
+VIEWS['ad-tai-khoan']=()=>{
+  const t=S.ui.tab;
+  if(t==='create') return _adAcc();
+  const k=t==='pending'?'accp':'acca';
+  const base=S.accounts.filter(a=>a.role!=='admin'&&(t==='pending'?a.status==='Chờ duyệt':true));
+  const list=sortBy(k,base.filter(a=>hit(k,a.name,a.email,a.contact||'')&&eq(k,'role',a.role)&&eq(k,'st',a.status)),a=>a.created);
+  const saved=S.accounts; S.accounts=S.accounts.filter(a=>a.role==='admin'||list.includes(a)||(t==='pending'&&a.status!=='Chờ duyệt'));
+  let html; try{html=_adAcc()}finally{S.accounts=saved}
+  const pend=saved.filter(a=>a.status==='Chờ duyệt').length;
+  html=html.replace(/Chờ duyệt \(\d+\)/,`Chờ duyệt (${pend})`);
+  const tb=toolbar(k,{q:'Tìm theo tên hoặc email',sel:t==='pending'?[['role','Tất cả vai trò',[['ctv','CTV'],['ngt','Người giới thiệu']]]]:[['role','Tất cả vai trò',[['kh','Khách hàng'],['hr','HR'],['ctv','CTV'],['ngt','Người giới thiệu']]],['st','Tất cả trạng thái',['Hoạt động','Chờ duyệt','Bị khóa','Từ chối']]],sort:true,n:list.length});
+  const j=html.indexOf('</div>',html.indexOf('class="tabs"'))+6;
+  html=html.slice(0,j)+tb+html.slice(j);
+  if(!list.length&&base.length) html=html.replace(/<div class="panel empty">Không có tài khoản chờ duyệt\.<\/div>/,noRes());
+  return html;
+};
+const _adj=VIEWS['ad-dieu-chinh'];
+VIEWS['ad-dieu-chinh']=()=>{
+  const k='adj'; let html=_adj();
+  const q=norm(F(k).q||'');
+  const opts=S.cvs.filter(v=>!q||norm(v.code+' '+v.name+' '+v.phone).includes(q));
+  if(opts.length&&!opts.some(v=>v.id===(S.ui.adjCv||S.cvs[0].id))){S.ui.adjCv=opts[0].id;html=_adj()}
+  html=html.replace(/<select id="aCv" data-act="adj-cv">[\s\S]*?<\/select>/,`<select id="aCv" data-act="adj-cv">${opts.map(v=>`<option value="${v.id}" ${v.id===(S.ui.adjCv||S.cvs[0].id)?'selected':''}>${v.code} · ${esc(v.name)}</option>`).join('')||'<option value="">Không tìm thấy CV</option>'}</select>`);
+  html=html.replace('<div class="field"><label for="aCv">CV</label>',`<div class="field span3"><label for="f-adj-q">Tìm CV cần điều chỉnh</label><label class="tbq solo">${ICON.search}<input id="f-adj-q" data-f="adj.q" value="${esc(F(k).q||'')}" placeholder="Nhập mã CV, tên hoặc SĐT"></label></div><div class="field"><label for="aCv">CV (${opts.length} kết quả)</label>`);
+  // lọc lịch sử
+  const k2='adjlog'; const logs=S.attrLog.filter(l=>hit(k2,l.code,l.old,l.neu,l.reason,l.by)&&eq(k2,'role',l.role));
+  const i=html.indexOf('<h2 style="margin-bottom:8px">Lịch sử điều chỉnh</h2>');
+  if(i>0){const end=html.lastIndexOf('</div>');html=html.slice(0,i)+`<h2 style="margin-bottom:8px">Lịch sử điều chỉnh</h2>`+(S.attrLog.length?toolbar(k2,{q:'Tìm theo mã CV, người, lý do',sel:[['role','Source và Screener',['Source','Screener']]],n:logs.length})+(logs.length?`<div class="tw"><table><thead><tr><th>Ngày</th><th>CV</th><th>Vai trò</th><th>Cũ</th><th>Mới</th><th>Lý do</th><th>Người sửa</th></tr></thead><tbody>${logs.map(l=>`<tr><td class="num">${dshow(l.at)}</td><td class="mono">${l.code}</td><td>${l.role}</td><td>${esc(l.old)}</td><td>${esc(l.neu)}</td><td>${esc(l.reason)}</td><td>${esc(l.by)}</td></tr>`).join('')}</tbody></table></div>`:noRes()):'<p class="small muted">Chưa có điều chỉnh nào.</p>')+'</div>';}
+  return html;
+};
+VIEWS['ad-thong-bao']=()=>{
+  const k='noti';const list=S.notis.filter(n=>hit(k,n.to,n.text)&&eq(k,'ch',n.channel)&&(!F(k).type||norm(n.text).includes(F(k).type)));
+  return head('','Nhật ký thông báo','Thông báo hệ thống đã gửi qua Zalo OA / Email.')+toolbar(k,{q:'Tìm theo người nhận hoặc nội dung',sel:[['ch','Tất cả kênh',[...new Set(S.notis.map(n=>n.channel))]],['type','Tất cả loại',[['ban giao','Bàn giao CV'],['link ca nhan','Link cá nhân'],['tai khoan','Tài khoản'],['thanh toan','Thanh toán']]]],n:list.length})+
+  (list.length?`<div class="tw"><table><thead><tr><th>Ngày</th><th>Người nhận</th><th>Kênh</th><th>Nội dung</th></tr></thead><tbody>${list.map(n=>`<tr><td class="num">${dshow(n.at)}</td><td>${esc(n.to)}</td><td>${n.channel}</td><td>${esc(n.text)}</td></tr>`).join('')}</tbody></table></div>`:noRes());
+};
+const _rep=VIEWS['ad-bao-cao'];
+VIEWS['ad-bao-cao']=()=>{
+  const m=F('rep').m||''; const months=[...new Set(S.orders.filter(o=>o.paidAt).map(o=>o.paidAt.slice(0,7)))].sort();
+  const keep={orders:S.orders,commissions:S.commissions,handovers:S.handovers};
+  if(m){S.orders=S.orders.filter(o=>!o.paidAt||o.paidAt.startsWith(m));S.commissions=S.commissions.filter(x=>x.at.startsWith(m));S.handovers=S.handovers.filter(h=>h.at.startsWith(m))}
+  let html; try{html=_rep()}finally{Object.assign(S,keep)}
+  const bar=`<div class="toolbar"><span class="small muted">Kỳ báo cáo</span><select id="f-rep-m" data-f="rep.m" aria-label="Kỳ báo cáo"><option value="">Toàn bộ thời gian</option>${months.map(x=>`<option value="${x}" ${m===x?'selected':''}>Tháng ${+x.slice(5)}/${x.slice(0,4)}</option>`).join('')}</select>${m?'<span class="small muted">Biểu đồ doanh thu luôn hiển thị đủ các tháng</span>':''}</div>`;
+  const i=html.indexOf('<div class="kpis">'); return html.slice(0,i)+bar+html.slice(i);
+};
+
+/* ===================== UI v4: form theo bản vận hành Excel ===================== */
+const WORK_O=['Đang tìm việc','Đang đi làm','Đang nghỉ việc chờ việc mới'];
+const ONB_O=['Ngay','Trong 1 tuần','Trong 2 tuần','Trong 1 tháng','Trên 1 tháng'];
+const EDU_O=['Đại học','Cao đẳng','Trung cấp','THPT','Sau đại học'];
+const sel=(id,opts,v,ph)=>`<select id="${id}" data-k="${id}">${ph?`<option value="">${ph}</option>`:''}${opt(opts).map(([a,b])=>`<option value="${esc(a)}" ${String(v??'')===String(a)?'selected':''}>${esc(b)}</option>`).join('')}</select>`;
+function cvForm(uc,title,desc){
+  const me=acc(S.me);
+  return head(uc,title,desc)+`<form class="panel stack form2" data-form="cv-new">
+  <div class="msg msg-info"><span class="msg-ic">${ICON.info}</span><div><div class="msg-t">Bạn chỉ cần nhập thông tin cơ bản</div><div class="msg-d">Kinh nghiệm, mức lương và các thông tin khác sẽ được HR xác nhận khi liên hệ ứng viên ở bước sàng lọc.</div></div></div>
+  <fieldset><legend>Người tạo nguồn</legend><div class="fgrid">
+    <div class="field"><label>Bạn là</label><input value="${ROLE_NAME[S.role]}" disabled></div>
+    <div class="field span2"><label>Họ và tên người tạo nguồn</label><input value="${esc(me.name)}" disabled></div></div></fieldset>
+  <fieldset><legend>Ứng viên</legend><div class="fgrid">
+    <div class="field span2"><label for="cName">Họ và tên ứng viên <i>*</i></label><input id="cName" required placeholder="Nguyễn Văn A"></div>
+    <div class="field"><label for="cPhone">Số điện thoại <i>*</i></label><input id="cPhone" required inputmode="tel" placeholder="09xx xxx xxx"></div>
+    <div class="field"><label for="cEmail">Email</label><input id="cEmail" type="email" placeholder="Để gửi thông báo cho ứng viên"></div>
+    <div class="field"><label for="cZalo">Số Zalo</label><input id="cZalo" placeholder="Nếu khác số điện thoại"></div>
+    <div class="field"><label for="cPos">Vị trí ứng tuyển <i>*</i></label><select id="cPos" required>${posOpts('','Chọn vị trí')}</select></div>
+    <div class="field"><label for="cArea">Khu vực <i>*</i></label><select id="cArea" required>${areaOpts('','Chọn khu vực')}</select></div>
+    <div class="field span2"><label for="cFile">File CV <i>*</i></label><input id="cFile" type="file" accept=".pdf,.doc,.docx" required><span class="hint">PDF hoặc Word, tối đa 5 MB. Demo không lưu file thật.</span></div>
+    <div class="field span3"><label for="cMemo">Ghi chú cho HR</label><textarea id="cMemo" placeholder="Thông tin thêm về ứng viên nếu có (không bắt buộc)"></textarea></div>
+  </div></fieldset>
+  <label class="check consent"><input type="checkbox" id="cConsent" required><span><b>Ứng viên đã đồng ý cho CV được khai thác</b><br><span class="small muted">Ứng viên đã được thông báo và đồng ý để Light Human chia sẻ hồ sơ với doanh nghiệp tuyển dụng (Nghị định 13/2023/NĐ-CP).</span></span></label>
+  <div id="cvErr"></div>
+  <div class="row"><button class="btn pri">${S.role==='hr'?'Tạo CV':'Nộp CV'}</button><button type="button" class="btn ghost" data-act="cv-sample">Điền dữ liệu mẫu</button></div></form>`;
+}
+VIEWS['hr-tao-cv']=()=>cvForm('UC04','Tạo CV','CV mới chuyển sang trạng thái Chờ sàng lọc. Bạn được ghi nhận là người tạo nguồn (Source).');
+VIEWS['ctv-nop-cv']=()=>cvForm('UC04','Nộp CV','HR sẽ liên hệ ứng viên để sàng lọc. Bạn được ghi nhận là người tạo nguồn và nhận commission khi CV được bán.');
+VIEWS['hr-sang-loc']=()=>{
+  const tab=S.ui.slTab||'wait';
+  const wait=S.cvs.filter(c=>c.status==='Chờ sàng lọc'), done=S.cvs.filter(c=>c.status!=='Chờ sàng lọc'&&c.screener===S.me);
+  const tabs=`<div class="tabs" role="tablist"><button role="tab" class="${tab==='wait'?'on':''}" aria-selected="${tab==='wait'}" data-act="sl-tab" data-v="wait">Chờ sàng lọc <span class="cnt">${wait.length}</span></button><button role="tab" class="${tab==='done'?'on':''}" aria-selected="${tab==='done'}" data-act="sl-tab" data-v="done">Tôi đã sàng lọc <span class="cnt">${done.length}</span></button></div>`;
+  const hd=head('UC05','Sàng lọc CV','Liên hệ ứng viên, xác nhận thông tin vào các ô bên dưới và ghi nhận kết quả. CV đạt sẽ được gửi link để ứng viên bật Open to Work.');
+  if(tab==='done'){
+    const k='sldone';const list=sortBy(k,done.filter(c=>hit(k,c.code,c.name,c.phone,c.note,c.reason)&&eq(k,'st',c.status)&&eq(k,'pos',c.pos)),c=>c.screenedAt||c.created);
+    return hd+tabs+toolbar(k,{q:'Tìm theo tên, mã CV hoặc ghi chú',sel:[['st','Tất cả kết quả',['Đạt','Không đạt']],['pos','Tất cả vị trí',POS_O()]],sort:true,n:list.length})+
+    (list.length?`<div class="tw"><table><thead><tr><th>Ứng viên</th><th>Vị trí</th><th>Kinh nghiệm</th><th>Lương mong muốn</th><th>Ngày sàng lọc</th><th>Kết quả</th><th>Lý do / ghi chú</th><th>Open to Work</th><th></th></tr></thead><tbody>
+    ${list.map(c=>`<tr><td><b>${esc(c.name)}</b><div class="small muted mono">${c.code}</div></td><td>${POS[c.pos]}<div class="small muted">${c.area}</div></td><td class="num">${c.exp!=null?c.exp+' năm':'—'}</td><td class="num">${c.salary!=null?c.salary+' triệu':'—'}</td><td class="num">${dshow(c.screenedAt||c.created)}</td><td>${pill(c.status)}</td><td class="small">${c.reason?`<b>${esc(c.reason)}</b><br>`:''}${esc(c.note)||'—'}</td><td>${otwPill(c)}</td><td class="r"><button class="btn sm" data-act="hr-open" data-id="${c.id}">Chi tiết</button></td></tr>`).join('')}</tbody></table></div>`:noRes());
+  }
+  const k='slwait';
+  const list=wait.filter(c=>hit(k,c.code,c.name,c.phone,c.email)&&eq(k,'pos',c.pos)&&eq(k,'area',c.area)&&(!F(k).by||acc(c.source)?.role===F(k).by)).sort((a,b)=>(F(k).sort==='new')?b.created.localeCompare(a.created):a.created.localeCompare(b.created));
+  if(!wait.length) return hd+tabs+`<div class="empty2">${ICON.ok}<h3>Đã sàng lọc hết CV</h3><p class="muted">Hiện không còn CV nào chờ sàng lọc.</p></div>`;
+  const selId=list.some(c=>c.id===S.ui.slSel)?S.ui.slSel:list[0]?.id; const c=selId&&cvById(selId);
+  if(c&&S.ui.slFormFor!==c.id){S.ui.slFormFor=c.id;S.ui.slForm={sExp:c.exp??'',sSal:c.salary??'',sGender:c.gender||'',sBirth:c.birth||'',sEdu:c.edu||'',sInd:c.industry||'',sWork:c.workStatus||'',sOnb:c.onboard||'',sStr:c.strengths||''}}
+  const f=S.ui.slForm||{}; const src=c&&acc(c.source);
+  const dup=c&&S.cvs.find(x=>x.id!==c.id&&(x.phone.replace(/\s/g,'')===c.phone.replace(/\s/g,'')||(c.email&&x.email.toLowerCase()===c.email.toLowerCase())));
+  const tb=`<div class="toolbar"><label class="tbq">${ICON.search}<input id="f-${k}-q" data-f="${k}.q" value="${esc(F(k).q||'')}" placeholder="Tìm theo tên, SĐT, email hoặc mã CV" aria-label="Tìm kiếm"></label>
+   <select id="f-${k}-pos" data-f="${k}.pos" aria-label="Vị trí"><option value="">Tất cả vị trí</option>${POS_O().map(([v,t])=>`<option value="${v}" ${F(k).pos===v?'selected':''}>${t}</option>`).join('')}</select>
+   <select id="f-${k}-area" data-f="${k}.area" aria-label="Khu vực"><option value="">Tất cả khu vực</option>${AREAS.map(a=>`<option ${F(k).area===a?'selected':''}>${a}</option>`).join('')}</select>
+   <select id="f-${k}-by" data-f="${k}.by" aria-label="Người nộp"><option value="">HR và CTV</option><option value="hr" ${F(k).by==='hr'?'selected':''}>Do HR tạo</option><option value="ctv" ${F(k).by==='ctv'?'selected':''}>Do CTV nộp</option></select>
+   <select id="f-${k}-sort" data-f="${k}.sort" aria-label="Sắp xếp"><option value="old" ${F(k).sort!=='new'?'selected':''}>Chờ lâu nhất trước</option><option value="new" ${F(k).sort==='new'?'selected':''}>Mới nộp trước</option></select>
+   <span class="tbn"><b>${list.length}</b>/${wait.length} CV</span></div>`;
+  if(!list.length) return hd+tabs+tb+noRes();
+  const req='<i>*</i>';
+  return hd+tabs+tb+`<div class="sl"><aside class="sl-list" aria-label="CV chờ sàng lọc">${list.map(x=>{const d=ageDays(x.created);return `<button class="sl-item ${x.id===selId?'on':''}" data-act="sl-pick" data-id="${x.id}"><span class="av">${initials(x.name)}</span><span class="sl-it"><b>${esc(x.name)}</b><span class="small muted">${POS[x.pos]} · ${x.area}</span><span class="small muted">${ROLE_NAME[acc(x.source)?.role]} ${esc(acc(x.source)?.name)}</span></span><span class="wait ${d>=3?'late':''}">${d===0?'Hôm nay':d+' ngày'}</span></button>`}).join('')}</aside>
+  <section class="sl-detail panel">
+    <div class="sl-h"><div><div class="small muted mono">${c.code} · nộp ${dshow(c.created)} · chờ ${ageDays(c.created)} ngày</div><h2>${esc(c.name)}</h2><div class="muted">${POS[c.pos]} · ${c.area}</div></div>${pill(c.status)}</div>
+    ${dup?notice('warn','Có thể trùng ứng viên',`SĐT hoặc email trùng với hồ sơ <b>${dup.code}</b> (${esc(dup.name)}). Kiểm tra trước khi đánh giá.`):notice('ok','Không phát hiện hồ sơ trùng','Đã đối chiếu số điện thoại và email với toàn bộ CV trong hệ thống.')}
+    <div class="blk"><h3>Thông tin người tạo nguồn nhập</h3><dl class="kv2">
+      <dt>Người tạo nguồn</dt><dd>${esc(src?.name)} <span class="small muted">(${ROLE_NAME[src?.role]})</span></dd>
+      <dt>Họ và tên ứng viên</dt><dd>${esc(c.name)}</dd><dt>Số điện thoại</dt><dd>${c.phone}</dd><dt>Email</dt><dd>${esc(c.email)||'—'}</dd>
+      <dt>Vị trí ứng tuyển</dt><dd>${POS[c.pos]}</dd><dt>Khu vực</dt><dd>${c.area}</dd>
+      <dt>File CV</dt><dd><button type="button" class="link" data-act="cv-view" data-id="${c.id}">📄 ${c.code}_CV.pdf</button></dd>
+      <dt>Đồng ý khai thác</dt><dd>${c.consent?'<span class="pill p-ok">Có</span>':'<span class="pill p-bad">Chưa</span>'}</dd>
+      ${c.memo?`<dt>Ghi chú</dt><dd>${esc(c.memo)}</dd>`:''}</dl></div>
+    <form class="stack form2" data-form="screen2" data-id="${c.id}">
+      <div class="blk"><h3>HR xác nhận sau khi liên hệ ứng viên</h3><div class="fgrid">
+        <div class="field"><label for="sExp">Kinh nghiệm (năm) ${req}</label><input id="sExp" data-k="sExp" type="number" min="0" max="40" step="0.5" value="${esc(f.sExp)}" placeholder="VD: 2"></div>
+        <div class="field"><label for="sSal">Mức lương mong muốn (triệu/tháng) ${req}</label><input id="sSal" data-k="sSal" type="number" min="1" max="200" value="${esc(f.sSal)}" placeholder="VD: 10"></div>
+        <div class="field"><label for="sInd">Ngành / lĩnh vực đã làm ${req}</label><input id="sInd" data-k="sInd" value="${esc(f.sInd)}" placeholder="VD: Bán lẻ"></div>
+        <div class="field"><label for="sGender">Giới tính ${req}</label>${sel('sGender',['Nữ','Nam'],f.sGender,'Chọn')}</div>
+        <div class="field"><label for="sBirth">Năm sinh ${req}</label><input id="sBirth" data-k="sBirth" type="number" min="1960" max="2008" value="${esc(f.sBirth)}" placeholder="VD: 2000"></div>
+        <div class="field"><label for="sEdu">Trình độ ${req}</label>${sel('sEdu',EDU_O,f.sEdu,'Chọn')}</div>
+        <div class="field"><label for="sWork">Tình trạng hiện tại ${req}</label>${sel('sWork',WORK_O,f.sWork,'Chọn')}</div>
+        <div class="field"><label for="sOnb">Có thể nhận việc ${req}</label>${sel('sOnb',ONB_O,f.sOnb,'Chọn')}</div>
+        <div class="field"><label>Người sàng lọc · ngày</label><input value="${esc(acc(S.me).name)} · ${dshow(nowISO())}" disabled></div>
+        <div class="field span3"><label for="sStr">Điểm mạnh nổi bật</label><textarea id="sStr" data-k="sStr" rows="2" placeholder="Hiển thị cho khách hàng ở phần xem trước">${esc(f.sStr)}</textarea></div>
+      </div><p class="hint">Các thông tin có dấu * sẽ hiển thị ở phần xem trước cho khách hàng.</p></div>
+      <div class="blk"><h3>Kết quả sàng lọc</h3>
+      <div class="seg2" role="radiogroup" aria-label="Kết quả"><label><input type="radio" name="res" data-k="res" value="Đạt" ${f.res==='Đạt'?'checked':''}><span>${ICON.ok} Đạt</span></label><label><input type="radio" name="res" data-k="res" value="Không đạt" ${f.res==='Không đạt'?'checked':''}><span>${ICON.err} Không đạt</span></label></div>
+      <div class="fgrid" style="margin-top:12px"><div class="field" ${f.res==='Không đạt'?'':'hidden'} id="rejWrap"><label for="sReason">Lý do không đạt ${req}</label>${sel('sReason',REJECT,f.sReason,'Chọn lý do')}</div>
+      <div class="field span2"><label for="sNote">Ghi chú nội bộ</label><input id="sNote" data-k="sNote" value="${esc(f.sNote||'')}" placeholder="Không hiển thị cho khách hàng"></div></div></div>
+      <div id="slErr"></div>
+      <div class="row"><button class="btn pri">Lưu kết quả</button><span class="small muted">CV đạt sẽ được gửi link cá nhân qua Zalo OA / Email để ứng viên bật Open to Work</span></div>
+    </form>
+  </section></div>`;
+};
+
 /* ===================== EVENTS ===================== */
 document.addEventListener('click',e=>{
   const g=e.target.closest('[data-go]'); if(g){e.preventDefault();closeOverlay();go(g.dataset.go);return}
@@ -597,6 +872,10 @@ document.addEventListener('click',e=>{
     reset:()=>{const k={role:S.role,me:S.me,uvToken:S.uvToken};seed();Object.assign(S,k);if(S.me&&!acc(S.me)){S.role='guest';S.me=null}render();toast('Đã khôi phục dữ liệu mẫu')},
     'fill-login':()=>{S.ui.login={email:acc(id).email};render()},
     'quick-login':()=>{const a=acc(id);S.ui.login=null;setRole(a.role,a.id);toast(`Xin chào ${a.name}`)},
+    'f-clear':()=>{const keep=F(v).sort;S.ui.f[v]={sort:keep};render()},
+    'sl-tab':()=>{S.ui.slTab=v;render()},
+    'sl-pick':()=>{S.ui.slSel=id;render()},
+    'cv-view':()=>{const c=cvById(id);drawer(`<div class="drawer-h"><h2>${c.code}_CV.pdf</h2><button class="btn sm" data-act="close">Đóng</button></div><div class="cvf-page"><div class="cvf-name">${esc(c.name).toUpperCase()}</div><div class="cvf-sub">${POS[c.pos]} · ${c.phone}</div><div class="cvf-l"></div><div class="cvf-sec">Kinh nghiệm</div><div class="cvf-line w80"></div><div class="cvf-line w60"></div><div class="cvf-line w70"></div><div class="cvf-sec">Học vấn</div><div class="cvf-line w50"></div><div class="small muted center" style="margin-top:8px">Bản xem trước minh họa</div></div>`)},
     'clear-filter':()=>{Object.assign(S.ui,{q:'',pos:'',area:'',exp:'',sal:''});render()},
     'toggle-uc':()=>{SHOW_UC=!SHOW_UC;try{localStorage.setItem('cvm_show_uc',SHOW_UC?'1':'0')}catch(_){}render()},
     'reg-type':()=>{S.ui.regType=v;render()},
@@ -614,7 +893,7 @@ document.addEventListener('click',e=>{
     'gw-fail':()=>{const o=S.orders.find(x=>x.id===S.ui.payOrder);payFail(o);S.ui.payResult={ok:false,order:o.id};render()},
     'pay-done':()=>{S.ui.payResult=null;go('kh-don-hang')},
     dl:()=>toast(`Demo: tải ${cvById(id).code}_CV.pdf (không có file thật)`),
-    'cv-sample':()=>{const f=(i,val)=>{const el=document.getElementById(i);if(el)el.value=val};f('cName','Phan Thị Yến');f('cPhone','0987 654 321');f('cEmail','yen.pt@gmail.com');f('cZalo','0987 654 321');f('cPos','CS');f('cInd','Ngân hàng');f('cExp','2');f('cArea','TP. HCM');f('cSal','11');f('cStr','Tư vấn sản phẩm thẻ, xử lý khiếu nại qua tổng đài');document.getElementById('cConsent').checked=true},
+    'cv-sample':()=>{const f=(i,val)=>{const el=document.getElementById(i);if(el)el.value=val};f('cName','Phan Thị Yến');f('cPhone','0987 654 321');f('cEmail','yen.pt@gmail.com');f('cPos','CS');f('cArea','TP. HCM');f('cMemo','Ứng viên từng làm tổng đài ngân hàng');document.getElementById('cConsent').checked=true;const fi=document.getElementById('cFile');if(fi)fi.required=false;toast('Đã điền dữ liệu mẫu (bỏ qua file CV trong demo)')},
     'hr-open':()=>drawer(hrDetail(cvById(id))),
     'hr-otw':()=>{const c=cvById(id);if(!document.getElementById('hrConfirm').checked){document.getElementById('hrOtwErr').innerHTML='<div class="note err">Xác nhận đã liên hệ với ứng viên trước khi cập nhật thay.</div>';return}
       c.otw=!c.otw;c.otwBy=acc(S.me).name+' (HR)';c.otwAt=nowISO();drawer(hrDetail(c));render();drawer(hrDetail(c));toast(`${c.code}: Open to Work ${c.otw?'đã bật':'đã tắt'}`)},
@@ -630,11 +909,16 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('change',e=>{
   const t=e.target;
+  if(t.closest&&t.closest('[data-form="screen2"]'))return;
+  if(t.dataset&&t.dataset.f&&t.tagName==='SELECT'){const [k,fd]=t.dataset.f.split('.');F(k)[fd]=t.value;render();return}
     if(t.dataset.act==='uv-pick'){S.uvToken=t.value;history.replaceState(null,'','?t='+encodeURIComponent(t.value));render();return}
   if(t.dataset.act==='adj-cv'){S.ui.adjCv=t.value;render();return}
   if(t.closest('[data-form="filter"]')){Object.assign(S.ui,{pos:val('fpos'),area:val('farea'),exp:val('fexp'),sal:val('fsal')});render()}
 });
-document.addEventListener('input',e=>{if(e.target.id==='fq'){S.ui.q=e.target.value;clearTimeout(window.__qt);window.__qt=setTimeout(()=>{render();const el=document.getElementById('fq');el.focus();el.setSelectionRange(el.value.length,el.value.length)},250)}});
+document.addEventListener('input',e=>{const t=e.target;
+  if(t.closest&&t.closest('[data-form="screen2"]')&&t.dataset.k){S.ui.slForm=S.ui.slForm||{};if(t.type!=='radio'||t.checked)S.ui.slForm[t.dataset.k]=t.value;if(t.name==='res'){document.getElementById('rejWrap').hidden=t.value!=='Không đạt'}return}
+  if(t.dataset&&t.dataset.f&&t.tagName==='INPUT'){const [k,fd]=t.dataset.f.split('.');F(k)[fd]=t.value;const id=t.id;clearTimeout(window.__ft);window.__ft=setTimeout(()=>{render();const el=document.getElementById(id);if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}},250);return}
+if(e.target.id==='fq'){S.ui.q=e.target.value;clearTimeout(window.__qt);window.__qt=setTimeout(()=>{render();const el=document.getElementById('fq');el.focus();el.setSelectionRange(el.value.length,el.value.length)},250)}});
 const val=id=>document.getElementById(id)?.value?.trim()??'';
 const err=(box,msg)=>{document.getElementById(box).innerHTML=notice('err',msg)};
 document.addEventListener('submit',e=>{
@@ -661,13 +945,23 @@ document.addEventListener('submit',e=>{
     Object.assign(a,{name:val('rgName'),status:'Chờ duyệt',kind:t==='ngt'?'Đối tác':undefined});S.accounts.push(a);
     f.outerHTML=`<div class="stack">${notice('ok','Đăng ký thành công!',`Cảm ơn ${esc(a.name)} đã đăng ký làm ${ROLE_NAME[t]}. Tài khoản của bạn đang chờ duyệt, chúng tôi sẽ gửi email tới <b>${esc(email)}</b> ngay khi tài khoản được kích hoạt.`)}<button class="btn" data-go="dang-nhap">Về trang đăng nhập</button></div>`;return}
   if(kind==='cv-new'){
-    if(!val('cPos')||!val('cArea'))return err('cvErr','Chọn vị trí và khu vực.');
+    if(!val('cPos')||!val('cArea'))return err('cvErr','Chọn vị trí ứng tuyển và khu vực.');
     const ph=val('cPhone').replace(/\s/g,''), em=val('cEmail').toLowerCase();
-    const dup=S.cvs.find(c=>c.phone.replace(/\s/g,'')===ph||c.email.toLowerCase()===em);
-    if(dup)return err('cvErr',`Ứng viên đã tồn tại trong hệ thống (${dup.code}). Không tạo CV mới.`);
+    const dup=S.cvs.find(c=>c.phone.replace(/\s/g,'')===ph||(em&&c.email.toLowerCase()===em));
+    if(dup)return document.getElementById('cvErr').innerHTML=notice('warn','Ứng viên này đã có trong hệ thống',`Số điện thoại hoặc email trùng với hồ sơ <b>${dup.code}</b>. Bạn không cần tạo thêm CV mới.`);
     const pos=val('cPos');const n=S.cvs.filter(c=>c.pos===pos).length+1;
-    const c={id:'cv'+(seq.id++),code:pos+'-'+String(n).padStart(3,'0'),pos,name:val('cName'),birth:+val('cBirth'),gender:val('cGender'),area:val('cArea'),exp:+val('cExp'),salary:+val('cSal'),edu:val('cEdu'),strengths:val('cStr'),industry:val('cInd'),phone:val('cPhone'),email:val('cEmail'),workStatus:'Đang tìm việc',onboard:'Ngay',source:S.me,screener:null,status:'Chờ sàng lọc',otw:false,note:'',token:'u'+Math.floor(80000+Math.random()*9999),consent:true,created:nowISO(),otwBy:null,otwAt:null};
-    S.cvs.push(c);toast(`Đã ${S.role==='hr'?'tạo':'nộp'} ${c.code} · Chờ sàng lọc`);go(S.role==='hr'?'hr-sang-loc':'ctv-cv');return}
+    const c={id:'cv'+(seq.id++),code:pos+'-'+String(n).padStart(3,'0'),pos,name:val('cName'),birth:null,gender:'',area:val('cArea'),exp:null,salary:null,edu:'',strengths:'',industry:'',phone:val('cPhone'),email:val('cEmail'),zalo:val('cZalo'),memo:val('cMemo'),workStatus:'',onboard:'',source:S.me,screener:null,status:'Chờ sàng lọc',otw:false,note:'',token:'u'+Math.floor(80000+Math.random()*9999),consent:true,created:nowISO(),otwBy:null,otwAt:null};
+    S.cvs.push(c);toast(`Đã ${S.role==='hr'?'tạo':'nộp'} ${c.code}, đang chờ HR sàng lọc`);go(S.role==='hr'?'hr-sang-loc':'ctv-cv');return}
+  if(kind==='screen2'){
+    const c=cvById(f.dataset.id), fm=S.ui.slForm||{};
+    if(!fm.res)return document.getElementById('slErr').innerHTML=notice('warn','Bạn chưa chọn kết quả','Chọn Đạt hoặc Không đạt trước khi lưu.');
+    if(fm.res==='Đạt'){const miss=[['sExp','Kinh nghiệm'],['sSal','Mức lương mong muốn'],['sInd','Ngành'],['sGender','Giới tính'],['sBirth','Năm sinh'],['sEdu','Trình độ'],['sWork','Tình trạng hiện tại'],['sOnb','Có thể nhận việc']].filter(([k])=>fm[k]===''||fm[k]==null).map(x=>x[1]);
+      if(miss.length)return document.getElementById('slErr').innerHTML=notice('warn','Còn thiếu thông tin để đăng CV','Vui lòng nhập: '+miss.join(', ')+'. Các thông tin này hiển thị cho khách hàng khi xem trước.');}
+    if(fm.res==='Không đạt'&&!fm.sReason)return document.getElementById('slErr').innerHTML=notice('warn','Bạn chưa chọn lý do không đạt','Chọn một lý do để HR khác có thể tra cứu sau này.');
+    Object.assign(c,{exp:fm.sExp===''?null:+fm.sExp,salary:fm.sSal===''?null:+fm.sSal,industry:fm.sInd||'',gender:fm.sGender||'',birth:fm.sBirth?+fm.sBirth:null,edu:fm.sEdu||'',workStatus:fm.sWork||'',onboard:fm.sOnb||'',strengths:fm.sStr||'',
+      status:fm.res,screener:S.me,screenedAt:nowISO(),note:(fm.sNote||'').trim(),reason:fm.res==='Không đạt'?fm.sReason:''});
+    if(fm.res==='Đạt'){notify(c.name,'Zalo OA / Email',`Link cá nhân để bật/tắt Open to Work: https://cvmarketplace.vn/u/${c.token}`);toast(`${c.code} đạt. Đã gửi link cá nhân cho ứng viên`)}else toast(`Đã lưu kết quả không đạt cho ${c.code}`);
+    S.ui.slForm={};S.ui.slFormFor=null;S.ui.slSel=null;render();return}
   if(kind==='screen'){
     const c=cvById(f.dataset.id), r=sub?.dataset.v, note=document.getElementById('sn-'+c.id).value.trim();
     if(r==='Không đạt'&&!note)return err('se-'+c.id,'Nhập ghi chú lý do không đạt.');
