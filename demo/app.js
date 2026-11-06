@@ -165,8 +165,8 @@ function renderSide(){
     <div class="side-foot small">${PORTAL==='admin'?'<a href="index.html" target="_blank" rel="noopener">Mở trang sử dụng ↗</a>':PORTAL==='user'?'<a href="admin.html" target="_blank" rel="noopener">Mở trang quản trị ↗</a>':'<a href="index.html" target="_blank" rel="noopener">Trang sử dụng ↗</a>'}
     <button class="link" data-act="reset">Khôi phục dữ liệu mẫu</button></div>`;
 }
-const head=(uc,title,desc,right='')=>`<div class="pagehead"><div><div class="crumb">${uc?`<span class="ucchip">${uc}</span>`:''}<span class="small muted">${ROLE_NAME[S.role]}</span></div><h1>${title}</h1>${desc?`<p>${desc}</p>`:''}</div>${right}</div>`;
-const pill=(s)=>{const m={'Đạt':'p-ok','Hoạt động':'p-ok','Đã thanh toán':'p-ok','Thành công':'p-ok','Đã gửi':'p-ok','Chờ sàng lọc':'p-warn','Chờ duyệt':'p-warn','Chờ thanh toán':'p-warn','Không đạt':'p-bad','Bị khóa':'p-bad','Từ chối':'p-bad','Thất bại':'p-bad'};return `<span class="pill ${m[s]||'p-neutral'}">${esc(s)}</span>`};
+const head=(uc,title,desc,right='')=>`<div class="pagehead"><div>${(uc&&SHOW_UC)?`<div class="crumb"><span class="ucchip">${uc}</span></div>`:''}<h1>${title}</h1>${desc?`<p>${desc}</p>`:''}</div>${right}</div>`;
+const pill=(s)=>{const m={'Đổi mật khẩu':'p-warn','Đạt':'p-ok','Hoạt động':'p-ok','Đã thanh toán':'p-ok','Thành công':'p-ok','Đã gửi':'p-ok','Chờ sàng lọc':'p-warn','Chờ duyệt':'p-warn','Chờ thanh toán':'p-warn','Không đạt':'p-bad','Bị khóa':'p-bad','Từ chối':'p-bad','Thất bại':'p-bad'};return `<span class="pill ${m[s]||'p-neutral'}">${esc(s)}</span>`};
 const otwPill=c=>c.status!=='Đạt'?'<span class="muted small">—</span>':c.otw?'<span class="pill p-acc">Open to Work</span>':'<span class="pill p-neutral">Đã tắt / chờ bật</span>';
 const posOpts=(v,all='Tất cả vị trí')=>`<option value="">${all}</option>`+Object.entries(POS).map(([k,n])=>`<option value="${k}" ${v===k?'selected':''}>${n}</option>`).join('');
 const areaOpts=(v,all='Tất cả khu vực')=>`<option value="">${all}</option>`+AREAS.map(a=>`<option ${v===a?'selected':''}>${a}</option>`).join('');
@@ -183,7 +183,7 @@ VIEWS['dang-nhap']=()=>{
   <form class="panel stack" data-form="login">
     <div class="field"><label for="lgEmail">Email</label><input id="lgEmail" type="email" required placeholder="ten@congty.vn" value="${esc(L?.email||'')}"></div>
     <div class="field"><label for="lgPw">Mật khẩu</label><input id="lgPw" type="password" required placeholder="Mật khẩu demo: bất kỳ" value="${L?.email?'demo1234':''}"></div>
-    <div id="lgErr">${L?.err?`<div class="note err">${L.err}</div>`:''}</div>
+    <div id="lgErr">${L?.err||''}</div>
     <button class="btn pri">Đăng nhập</button>
     ${PORTAL==='user'?`<p class="small muted">Chưa có tài khoản? <button type="button" class="link" data-go="dang-ky">Đăng ký</button></p>`:''}
   </form>
@@ -454,6 +454,136 @@ VIEWS['uv-link']=()=>{
   <div class="small"><b>Đã chuyển cho:</b> ${S.handovers.filter(h=>h.cv===c.id).map(h=>esc(acc(h.customer).name)+' ('+dshow(h.at)+')').join(', ')||'chưa có doanh nghiệp nào'}</div></div>`;
 };
 
+/* ===================== UI v2 (giao diện thân thiện) ===================== */
+let SHOW_UC=false; try{SHOW_UC=localStorage.getItem('cvm_show_uc')==='1'}catch(_){}
+const ICON={
+  err:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 16.5v.5"/></svg>',
+  warn:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17v.5"/></svg>',
+  info:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5V8"/></svg>',
+  ok:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m7.5 12.5 3 3 6-6.5"/></svg>',
+  time:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 2"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  cart:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>',
+  search:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>'
+};
+function notice(type,title,text){
+  const ic={err:ICON.err,warn:ICON.warn,info:ICON.info,ok:ICON.ok,time:ICON.time,lock:ICON.lock}[type]||ICON.info;
+  const cls={time:'warn',lock:'err'}[type]||type;
+  return `<div class="msg msg-${cls}" role="${cls==='err'?'alert':'status'}"><span class="msg-ic">${ic}</span><div><div class="msg-t">${title}</div>${text?`<div class="msg-d">${text}</div>`:''}</div></div>`;
+}
+function statusMsg(a){
+  if(a.status==='Chờ duyệt') return notice('time','Tài khoản đang chờ duyệt','Đăng ký của bạn đã được gửi tới bộ phận vận hành. Bạn sẽ nhận email ngay khi tài khoản được kích hoạt.');
+  if(a.status==='Bị khóa') return notice('lock','Tài khoản đang tạm khóa','Vui lòng liên hệ quản trị viên Light Human để được hỗ trợ mở khóa.');
+  if(a.status==='Từ chối') return notice('err','Đăng ký chưa được chấp thuận',`${a.reason?'Lý do: '+esc(a.reason)+'. ':''}Bạn có thể liên hệ Light Human để được hướng dẫn thêm.`);
+  return notice('err','Chưa thể đăng nhập','Vui lòng thử lại sau.');
+}
+function toast(msg,isErr){
+  const t=document.createElement('div');t.className='toast'+(isErr?' err':'');
+  t.innerHTML=`<span class="msg-ic">${isErr?ICON.err:ICON.ok}</span><span>${esc(msg)}</span>`;
+  const box=document.getElementById('toasts');box.appendChild(t);while(box.children.length>3)box.firstChild.remove();setTimeout(()=>t.remove(),3800);
+}
+const initials=n=>n.split(' ').filter(Boolean).slice(-2).map(w=>w[0]).join('').toUpperCase();
+function layout(){
+  const top=document.getElementById('topbar'), shell=document.getElementById('shell');
+  const mode=S.route==='dang-nhap'||S.route==='dang-ky'?'auth':(PORTAL==='user'?'top':(PORTAL==='uv'?'bare':'side'));
+  document.body.dataset.layout=mode;
+  if(top) top.hidden=mode!=='top';
+}
+function render(){
+  let r=location.hash.slice(1)||NAV[S.role][0][0];
+  if(!VIEWS[r]||!(NAV[S.role].some(i=>i[0]===r)||(r==='kh-thanh-toan'&&S.role==='kh')))r=NAV[S.role][0][0];
+  S.route=r;
+  if(S.role==='uv'&&!S.uvToken) S.uvToken=S.cvs.find(c=>c.status==='Đạt'&&!c.otw)?.token;
+  layout(); renderSide();
+  document.getElementById('main').innerHTML=(VIEWS[r]||VIEWS[NAV[S.role][0][0]])();
+  window.scrollTo(0,0); save();
+}
+function renderSide(){
+  const me=acc(S.me), items=NAV[S.role], mode=document.body.dataset.layout;
+  const side=document.getElementById('side'), top=document.getElementById('topbar');
+  if(mode==='top'){
+    side.innerHTML='';
+    const nav=items.filter(i=>i[0]!=='kh-gio');
+    const n=S.cart.length;
+    top.innerHTML=`<div class="tb-in">
+      <a class="tb-brand" href="#${items[0][0]}"><img src="assets/logo.png" alt="Light Human"><span>CV Marketplace</span></a>
+      <nav class="tb-nav" aria-label="Chức năng">${nav.map(([id,l])=>`<a href="#${id}" class="${S.route===id||(id==='kh-don-hang'&&S.route==='kh-thanh-toan')?'on':''}">${l}</a>`).join('')}</nav>
+      <div class="tb-right">${S.role==='kh'?`<a class="tb-cart ${S.route==='kh-gio'?'on':''}" href="#kh-gio" aria-label="Giỏ CV">${ICON.cart}${n?`<b>${n}</b>`:''}</a>`:''}
+        <details class="tb-user"><summary><span class="av">${initials(me?.name||'?')}</span><span class="tb-un">${esc(me?.name||'')}</span></summary>
+          <div class="tb-menu"><div class="small muted">${ROLE_NAME[S.role]}</div><div style="font-weight:600">${esc(me?.name||'')}</div><div class="small muted">${esc(me?.email||'')}</div>
+          <hr><button class="link" data-act="logout">Đăng xuất</button></div></details></div></div>`;
+    return;
+  }
+  if(mode==='auth'||mode==='bare'){side.innerHTML='';return}
+  side.innerHTML=`
+    <div class="brand"><img src="assets/logo.png" alt="Light Human"><div class="brand-sub">Quản trị CV Marketplace</div></div>
+    <nav class="menu" aria-label="Chức năng">${items.map(([id,l])=>`<a href="#${id}" class="${S.route===id?'on':''}"><span>${l}</span></a>`).join('')}</nav>
+    <div class="who"><span class="av">${initials(me?.name||'?')}</span><div style="min-width:0"><div style="font-weight:600">${esc(me?.name||'')}</div><button class="link small" data-act="logout">Đăng xuất</button></div></div>`;
+}
+function authShell(inner){
+  const isAdmin=PORTAL==='admin';
+  return `<div class="auth2"><section class="auth-brand">
+    <div class="ab-logo"><img src="assets/mark.png" alt=""><span>Light Human</span></div>
+    <h2>${isAdmin?'Quản trị <em>CV Marketplace</em>':'Nguồn ứng viên <em>đã sàng lọc</em>, sẵn sàng cho doanh nghiệp'}</h2>
+    <ul>${(isAdmin?['Duyệt và cấp tài khoản cho đối tác','Cấu hình giá bán, tỷ lệ commission','Theo dõi doanh thu và hiệu quả nguồn CV']
+      :['Hồ sơ được HR của Light Human đánh giá trước khi đăng','Xem trước thông tin, chỉ trả tiền cho CV phù hợp','Nhận đầy đủ thông tin ngay sau khi thanh toán']).map(x=>`<li>${ICON.ok}<span>${x}</span></li>`).join('')}</ul>
+  </section><section class="auth-form">${inner}</section></div>`;
+}
+VIEWS['dang-nhap']=()=>{
+  const L=S.ui.login;
+  if(L&&L.step==='change') return authShell(`<h1>Đặt mật khẩu mới</h1><p class="muted">Đây là lần đầu bạn đăng nhập bằng tài khoản được cấp. Hãy đặt mật khẩu riêng để tiếp tục.</p>
+   <form class="stack" data-form="change-pw"><div class="field"><label for="np1">Mật khẩu mới</label><input id="np1" type="password" required minlength="8" placeholder="Tối thiểu 8 ký tự"></div>
+   <div class="field"><label for="np2">Nhập lại mật khẩu mới</label><input id="np2" type="password" required></div>
+   <div id="cpErr"></div><button class="btn pri big">Lưu và tiếp tục</button></form>`);
+  const pool=S.accounts.filter(a=>PORTAL_ROLES[PORTAL].includes(a.role));
+  const quick=PORTAL_ROLES[PORTAL].map(r=>pool.find(a=>a.id===DEFAULT_ACC[r]&&a.status==='Hoạt động')||pool.find(a=>a.role===r&&a.status==='Hoạt động'&&!a.mustChange)).filter(Boolean);
+  return authShell(`<h1>${PORTAL==='admin'?'Đăng nhập quản trị':'Chào mừng bạn trở lại'}</h1>
+  <p class="muted">${PORTAL==='admin'?'Dành cho quản trị viên vận hành hệ thống.':'Đăng nhập để tìm kiếm và quản lý CV.'}</p>
+  <form class="stack" data-form="login">
+    <div class="field"><label for="lgEmail">Email</label><input id="lgEmail" type="email" required autocomplete="username" placeholder="ten@congty.vn" value="${esc(L?.email||'')}"></div>
+    <div class="field"><label for="lgPw">Mật khẩu</label><input id="lgPw" type="password" required autocomplete="current-password" placeholder="Nhập mật khẩu" value="${L?.email?'demo1234':''}"></div>
+    <div id="lgErr">${L?.err||''}</div>
+    <button class="btn pri big">Đăng nhập</button>
+  </form>
+  ${PORTAL==='user'?`<p class="center muted">Chưa có tài khoản? <button type="button" class="link" data-go="dang-ky">Đăng ký ngay</button></p>`:''}
+  <div class="demo-box"><div class="demo-h"><span class="tag-demo">Demo</span> Đăng nhập nhanh</div>
+    <div class="quick">${quick.map(a=>`<button type="button" data-act="quick-login" data-id="${a.id}"><span class="av">${initials(a.name)}</span><span><b>${ROLE_NAME[a.role]}</b><small>${esc(a.name)}</small></span></button>`).join('')}</div>
+    <details class="more"><summary>Tài khoản mẫu khác (chờ duyệt, phải đổi mật khẩu…)</summary>
+    <div class="acclist">${pool.map(a=>`<button type="button" data-act="fill-login" data-id="${a.id}"><span>${esc(a.name)} <span class="small muted">· ${ROLE_NAME[a.role]}</span></span>${pill(a.mustChange&&a.status==='Hoạt động'?'Đổi mật khẩu':a.status)}</button>`).join('')}</div></details>
+  </div>`);
+};
+const _reg=VIEWS['dang-ky'];
+VIEWS['dang-ky']=()=>authShell(_reg().replace(/^<div class="auth">/,'<div>').replace("head('UC01'",""));
+function cvCard(c,mine){
+  const sel=S.cart.includes(c.id);
+  return `<article class="cv2 ${sel?'sel':''}">
+    <div class="cv2-top"><span class="av lg">${c.pos}</span><div style="min-width:0"><h3>${POS[c.pos]}</h3><div class="small muted"><span class="mono">${c.code}</span> · ${c.area}</div></div>${mine?'<span class="pill p-ok">Đã mua</span>':''}</div>
+    <div class="chips"><span>${c.exp?c.exp+' năm kinh nghiệm':'Chưa có kinh nghiệm'}</span><span>${c.edu}</span><span>${c.gender}, ${2026-c.birth} tuổi</span></div>
+    <p class="cv2-str">${esc(c.strengths)||'Chưa cập nhật điểm mạnh'}</p>
+    <div class="cv2-meta"><span class="muted small">Ngành</span> ${esc(c.industry)} <span class="dot">·</span> <span class="muted small">Lương mong muốn</span> <b class="num">${c.salary} triệu</b></div>
+    <div class="cv2-foot"><button class="btn ghost sm" data-act="preview" data-id="${c.id}">Xem nhanh</button>
+    ${mine?`<button class="btn sm" data-go="kh-cv">Mở CV</button>`:sel?`<button class="btn sm sel" data-act="cart-del" data-id="${c.id}">✓ Đã thêm</button>`:`<button class="btn pri sm" data-act="cart-add" data-id="${c.id}">Thêm vào giỏ</button>`}</div>
+  </article>`;
+}
+VIEWS['kh-tim-kiem']=()=>{
+  const u=S.ui; const mine=owned(S.me);
+  let list=S.cvs.filter(available).filter(c=>(!u.pos||c.pos===u.pos)&&(!u.area||c.area===u.area)&&(!u.exp||c.exp>=+u.exp)&&(!u.sal||c.salary<=+u.sal)&&(!u.q||(c.code+' '+POS[c.pos]+' '+c.industry+' '+c.strengths).toLowerCase().includes(u.q.toLowerCase())));
+  const n=S.cart.length, need=Math.max(0,S.cfg.minCV-n);
+  return `<section class="hero">${SHOW_UC?'<span class="ucchip">UC07</span>':''}
+    <h1>Tìm ứng viên <em>phù hợp</em> cho doanh nghiệp</h1>
+    <p>${S.cvs.filter(available).length} hồ sơ đã được HR Light Human sàng lọc và đang sẵn sàng nhận việc · <b>${fmt(S.cfg.price)}</b>/CV</p>
+    <form class="searchbar" data-form="filter">
+      <label class="sb-q">${ICON.search}<input id="fq" value="${esc(u.q)}" placeholder="Tìm theo vị trí, ngành, kỹ năng hoặc mã CV" aria-label="Từ khóa"></label>
+      <select id="fpos" aria-label="Vị trí">${posOpts(u.pos)}</select>
+      <select id="farea" aria-label="Khu vực">${areaOpts(u.area)}</select>
+      <select id="fexp" aria-label="Kinh nghiệm"><option value="">Kinh nghiệm bất kỳ</option>${[1,2,3,5].map(x=>`<option value="${x}" ${u.exp==x?'selected':''}>Từ ${x} năm</option>`).join('')}</select>
+      <select id="fsal" aria-label="Lương"><option value="">Lương bất kỳ</option>${[8,10,12,15].map(x=>`<option value="${x}" ${u.sal==x?'selected':''}>Đến ${x} triệu</option>`).join('')}</select>
+    </form></section>
+  <div class="resbar"><span><b>${list.length}</b> hồ sơ phù hợp</span>${(u.q||u.pos||u.area||u.exp||u.sal)?`<button class="link small" data-act="clear-filter">Xóa bộ lọc</button>`:''}</div>
+  ${list.length?`<div class="cvgrid2">${list.map(c=>cvCard(c,mine.has(c.id))).join('')}</div>`:`<div class="empty2">${ICON.search}<h3>Chưa có hồ sơ phù hợp</h3><p class="muted">Thử bỏ bớt điều kiện lọc hoặc tìm với từ khóa khác.</p><button class="btn" data-act="clear-filter">Xóa bộ lọc</button></div>`}
+  ${n?`<div class="cartbar"><div><b>${n} CV</b> trong giỏ · <span class="num">${fmt(n*S.cfg.price)}</span>${need?`<div class="small">Thêm ${need} CV nữa để đặt mua (tối thiểu ${S.cfg.minCV} CV/đơn)</div>`:'<div class="small">Đủ điều kiện đặt mua</div>'}</div><button class="btn gold" data-go="kh-gio">Xem giỏ CV</button></div>`:''}`;
+};
+
 /* ===================== EVENTS ===================== */
 document.addEventListener('click',e=>{
   const g=e.target.closest('[data-go]'); if(g){e.preventDefault();closeOverlay();go(g.dataset.go);return}
@@ -466,6 +596,9 @@ document.addEventListener('click',e=>{
     logout:()=>{S.role='guest';S.me=null;S.cart=[];S.ui.login=null;go('dang-nhap')},
     reset:()=>{const k={role:S.role,me:S.me,uvToken:S.uvToken};seed();Object.assign(S,k);if(S.me&&!acc(S.me)){S.role='guest';S.me=null}render();toast('Đã khôi phục dữ liệu mẫu')},
     'fill-login':()=>{S.ui.login={email:acc(id).email};render()},
+    'quick-login':()=>{const a=acc(id);S.ui.login=null;setRole(a.role,a.id);toast(`Xin chào ${a.name}`)},
+    'clear-filter':()=>{Object.assign(S.ui,{q:'',pos:'',area:'',exp:'',sal:''});render()},
+    'toggle-uc':()=>{SHOW_UC=!SHOW_UC;try{localStorage.setItem('cvm_show_uc',SHOW_UC?'1':'0')}catch(_){}render()},
     'reg-type':()=>{S.ui.regType=v;render()},
     'ref-try':()=>{if(S.role!=='guest'){window.open('index.html?ref='+encodeURIComponent(v)+'#dang-ky','_blank','noopener');return}S.ui.regRef=v;S.ui.regType='kh';go('dang-ky')},
     preview:()=>drawer(previewHTML(cvById(id))),
@@ -503,15 +636,15 @@ document.addEventListener('change',e=>{
 });
 document.addEventListener('input',e=>{if(e.target.id==='fq'){S.ui.q=e.target.value;clearTimeout(window.__qt);window.__qt=setTimeout(()=>{render();const el=document.getElementById('fq');el.focus();el.setSelectionRange(el.value.length,el.value.length)},250)}});
 const val=id=>document.getElementById(id)?.value?.trim()??'';
-const err=(box,msg)=>{document.getElementById(box).innerHTML=`<div class="note err">${msg}</div>`};
+const err=(box,msg)=>{document.getElementById(box).innerHTML=notice('err',msg)};
 document.addEventListener('submit',e=>{
   e.preventDefault(); const f=e.target, kind=f.dataset.form, sub=e.submitter;
   if(kind==='filter')return;
   if(kind==='login'){
     const a=S.accounts.find(x=>x.email.toLowerCase()===val('lgEmail').toLowerCase());
-    if(!a||!val('lgPw')){S.ui.login={email:val('lgEmail'),err:'Email hoặc mật khẩu không đúng. Vui lòng nhập lại.'};render();return}
-    if(!PORTAL_ROLES[PORTAL].includes(a.role)){S.ui.login={email:a.email,err:PORTAL==='admin'?'Trang này chỉ dành cho Admin. Người dùng khác đăng nhập tại trang sử dụng.':'Tài khoản Admin đăng nhập tại trang quản trị.'};render();return}
-    if(a.status!=='Hoạt động'){S.ui.login={email:a.email,err:`Tài khoản đang ở trạng thái "${a.status}"${a.reason?': '+esc(a.reason):''}. Không thể đăng nhập.`};render();return}
+    if(!a||!val('lgPw')){S.ui.login={email:val('lgEmail'),err:notice('err','Email hoặc mật khẩu chưa đúng','Bạn kiểm tra lại giúp nhé. Mật khẩu có phân biệt chữ hoa và chữ thường.')};render();return}
+    if(!PORTAL_ROLES[PORTAL].includes(a.role)){S.ui.login={email:a.email,err:PORTAL==='admin'?notice('info','Trang này dành cho quản trị viên','Khách hàng và đối tác vui lòng đăng nhập tại <a href="index.html">trang CV Marketplace</a>.'):notice('info','Đây là tài khoản quản trị','Vui lòng đăng nhập tại <a href="admin.html">trang quản trị</a>.')};render();return}
+    if(a.status!=='Hoạt động'){S.ui.login={email:a.email,err:statusMsg(a)};render();return}
     if(a.mustChange){S.ui.login={step:'change',id:a.id};render();return}
     S.ui.login=null;setRole(a.role,a.id);toast(`Đăng nhập thành công · ${ROLE_NAME[a.role]}`);return}
   if(kind==='change-pw'){
@@ -524,9 +657,9 @@ document.addEventListener('submit',e=>{
     if(val('rgPw').length<8)return err('rgErr','Mật khẩu cần tối thiểu 8 ký tự.');
     const ref=S.accounts.find(a=>a.refCode&&a.refCode===S.ui.regRef&&a.status==='Hoạt động');
     const a={id:'a'+(seq.id++),role:t,email,phone:val('rgPhone'),created:nowISO()};
-    if(t==='kh'){Object.assign(a,{name:val('rgCompany'),contact:val('rgContact'),status:'Hoạt động',refBy:ref?.id||null});S.accounts.push(a);S.ui.regRef='';setRole('kh',a.id);toast(ref?`Đăng ký thành công. Đã gắn Người giới thiệu ${ref.name}.`:'Đăng ký thành công.');return}
+    if(t==='kh'){Object.assign(a,{name:val('rgCompany'),contact:val('rgContact'),status:'Hoạt động',refBy:ref?.id||null});S.accounts.push(a);S.ui.regRef='';setRole('kh',a.id);toast('Chào mừng bạn đến với CV Marketplace!');return}
     Object.assign(a,{name:val('rgName'),status:'Chờ duyệt',kind:t==='ngt'?'Đối tác':undefined});S.accounts.push(a);
-    f.outerHTML=`<div class="panel stack"><div class="note ok">Đã gửi đăng ký tài khoản ${ROLE_NAME[t]} cho <b>${esc(a.name)}</b>. Tài khoản đang chờ Admin duyệt; kết quả duyệt được gửi qua email ${esc(email)}.</div><button class="btn" data-go="dang-nhap">Về trang đăng nhập</button></div>`;return}
+    f.outerHTML=`<div class="stack">${notice('ok','Đăng ký thành công!',`Cảm ơn ${esc(a.name)} đã đăng ký làm ${ROLE_NAME[t]}. Tài khoản của bạn đang chờ duyệt, chúng tôi sẽ gửi email tới <b>${esc(email)}</b> ngay khi tài khoản được kích hoạt.`)}<button class="btn" data-go="dang-nhap">Về trang đăng nhập</button></div>`;return}
   if(kind==='cv-new'){
     if(!val('cPos')||!val('cArea'))return err('cvErr','Chọn vị trí và khu vực.');
     const ph=val('cPhone').replace(/\s/g,''), em=val('cEmail').toLowerCase();
