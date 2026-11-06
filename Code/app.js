@@ -126,6 +126,7 @@ const DEFAULT_ACC={kh:'kh2',hr:'hr1',ctv:'ctv1',ngt:'bd1',admin:'ad1'};
 const PORTAL=window.PORTAL||'user';
 const DATA_KEY='cvm_data_v1', SES_KEY='cvm_session_'+PORTAL;
 const PORTAL_ROLES={user:['kh','hr','ctv','ngt'],admin:['admin'],uv:[]};
+const LOGIN_ROLES=PORTAL==='user'?['kh','hr','ctv','ngt','admin']:PORTAL_ROLES[PORTAL];
 if(PORTAL==='admin')NAV.guest=NAV.guest.slice(0,1);
 function store(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(_){}}
 function load(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(_){return null}}
@@ -136,6 +137,7 @@ function save(){const d={seq};DATA_FIELDS.forEach(k=>d[k]=S[k]);store(DATA_KEY,d
 function restore(){const d=load(DATA_KEY);if(!d)return false;seed();seq=d.seq;DATA_FIELDS.forEach(k=>S[k]=d[k]);return true}
 window.addEventListener('storage',e=>{if(e.key===DATA_KEY&&e.newValue){const keep={role:S.role,me:S.me,cart:S.cart,ui:S.ui,uvToken:S.uvToken};restore();Object.assign(S,keep);render()}});
 function setRole(role,accId){
+  if(PORTAL==='user'&&role==='admin'){try{sessionStorage.setItem('cvm_session_admin',JSON.stringify({role:'admin',me:accId,cart:[]}))}catch(_){}location.href='admin.html';return}
   S.role=role; S.me=accId||null; S.cart=[];
   go(NAV[role][0][0]);
 }
@@ -189,7 +191,7 @@ VIEWS['dang-nhap']=()=>{
     ${PORTAL==='user'?`<p class="small muted">Chưa có tài khoản? <button type="button" class="link" data-go="dang-ky">Đăng ký</button></p>`:''}
   </form>
   <div class="panel"><h3 style="margin-bottom:8px">Tài khoản mẫu</h3><p class="small muted" style="margin-bottom:10px">Chọn để điền sẵn email. Có cả tài khoản chờ duyệt và tài khoản phải đổi mật khẩu để thử các luồng ngoại lệ.</p>
-  <div class="acclist">${S.accounts.filter(a=>PORTAL_ROLES[PORTAL].includes(a.role)).map(a=>`<button type="button" data-act="fill-login" data-id="${a.id}"><span>${esc(a.name)} <span class="small muted">· ${ROLE_NAME[a.role]}</span></span>${pill(a.status)}</button>`).join('')}</div></div></div>`;
+  <div class="acclist">${S.accounts.filter(a=>LOGIN_ROLES.includes(a.role)).map(a=>`<button type="button" data-act="fill-login" data-id="${a.id}"><span>${esc(a.name)} <span class="small muted">· ${ROLE_NAME[a.role]}</span></span>${pill(a.status)}</button>`).join('')}</div></div></div>`;
 };
 VIEWS['dang-ky']=()=>{
   const t=S.ui.regType; const ref=S.ui.regRef;
@@ -536,8 +538,8 @@ VIEWS['dang-nhap']=()=>{
    <form class="stack" data-form="change-pw"><div class="field"><label for="np1">Mật khẩu mới</label><input id="np1" type="password" required minlength="8" placeholder="Tối thiểu 8 ký tự"></div>
    <div class="field"><label for="np2">Nhập lại mật khẩu mới</label><input id="np2" type="password" required></div>
    <div id="cpErr"></div><button class="btn pri big">Lưu và tiếp tục</button></form>`);
-  const pool=S.accounts.filter(a=>PORTAL_ROLES[PORTAL].includes(a.role));
-  const quick=PORTAL_ROLES[PORTAL].map(r=>pool.find(a=>a.id===DEFAULT_ACC[r]&&a.status==='Hoạt động')||pool.find(a=>a.role===r&&a.status==='Hoạt động'&&!a.mustChange)).filter(Boolean);
+  const pool=S.accounts.filter(a=>LOGIN_ROLES.includes(a.role));
+  const quick=LOGIN_ROLES.map(r=>pool.find(a=>a.id===DEFAULT_ACC[r]&&a.status==='Hoạt động')||pool.find(a=>a.role===r&&a.status==='Hoạt động'&&!a.mustChange)).filter(Boolean);
   return authShell(`<h1>${PORTAL==='admin'?'Đăng nhập quản trị':'Chào mừng bạn trở lại'}</h1>
   <p class="muted">${PORTAL==='admin'?'Dành cho quản trị viên vận hành hệ thống.':'Đăng nhập để tìm kiếm và quản lý CV.'}</p>
   <form class="stack" data-form="login">
@@ -887,7 +889,7 @@ document.addEventListener('click',e=>{
   if(a.tagName==='SELECT')return;
   const A={
     'close-scrim':closeOverlay, close:closeOverlay,
-    logout:()=>{S.role='guest';S.me=null;S.cart=[];S.ui.login=null;go('dang-nhap')},
+    logout:()=>{S.role='guest';S.me=null;S.cart=[];S.ui.login=null;if(PORTAL==='admin'){sesSave();location.href='index.html#dang-nhap';return}go('dang-nhap')},
     reset:()=>{const k={role:S.role,me:S.me,uvToken:S.uvToken};seed();Object.assign(S,k);if(S.me&&!acc(S.me)){S.role='guest';S.me=null}render();toast('Đã khôi phục dữ liệu mẫu')},
     'fill-login':()=>{S.ui.login={email:acc(id).email};render()},
     'quick-login':()=>{const a=acc(id);S.ui.login=null;setRole(a.role,a.id);toast(`Xin chào ${a.name}`)},
@@ -949,7 +951,7 @@ document.addEventListener('submit',e=>{
   if(kind==='login'){
     const a=S.accounts.find(x=>x.email.toLowerCase()===val('lgEmail').toLowerCase());
     if(!a||!val('lgPw')){S.ui.login={email:val('lgEmail'),err:notice('err','Email hoặc mật khẩu chưa đúng','Bạn kiểm tra lại giúp nhé. Mật khẩu có phân biệt chữ hoa và chữ thường.')};render();return}
-    if(!PORTAL_ROLES[PORTAL].includes(a.role)){S.ui.login={email:a.email,err:PORTAL==='admin'?notice('info','Trang này dành cho quản trị viên','Khách hàng và đối tác vui lòng đăng nhập tại <a href="index.html">trang CV Marketplace</a>.'):notice('info','Đây là tài khoản quản trị','Vui lòng đăng nhập tại <a href="admin.html">trang quản trị</a>.')};render();return}
+    if(!LOGIN_ROLES.includes(a.role)){S.ui.login={email:a.email,err:PORTAL==='admin'?notice('info','Trang này dành cho quản trị viên','Khách hàng và đối tác vui lòng đăng nhập tại <a href="index.html">trang CV Marketplace</a>.'):notice('info','Đây là tài khoản quản trị','Vui lòng đăng nhập tại <a href="admin.html">trang quản trị</a>.')};render();return}
     if(a.status!=='Hoạt động'){S.ui.login={email:a.email,err:statusMsg(a)};render();return}
     if(a.mustChange){S.ui.login={step:'change',id:a.id};render();return}
     S.ui.login=null;setRole(a.role,a.id);toast(`Đăng nhập thành công · ${ROLE_NAME[a.role]}`);return}
@@ -1027,6 +1029,7 @@ if(!restore()) seed();
   if(PORTAL==='uv'){S.role='uv';S.uvToken=qs.get('t')||S.cvs.find(c=>c.status==='Đạt'&&!c.otw)?.token;render();return}
   const ses=sesLoad();
   if(ses&&ses.me&&acc(ses.me)&&PORTAL_ROLES[PORTAL].includes(ses.role)){S.role=ses.role;S.me=ses.me;S.cart=ses.cart||[]}else{S.role='guest';S.me=null}
+  if(PORTAL==='admin'&&S.role==='guest'){location.replace('index.html#dang-nhap');return}
   if(qs.get('ref')&&PORTAL==='user'&&S.role==='guest'){S.ui.regRef=qs.get('ref');S.ui.regType='kh';if(!location.hash)location.hash='dang-ky'}
   render();
 })();

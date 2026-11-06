@@ -22,7 +22,7 @@ CV Marketplace là hệ thống giúp Light Human khai thác thương mại ngu�
 ```
 Code/      Bản demo giao diện (HTML, CSS, JavaScript)
   index.html   Cổng người dùng: Khách hàng, HR, CTV, Người giới thiệu
-  admin.html   Cổng quản trị: Admin
+  admin.html   Cổng quản trị: Admin (vào sau khi đăng nhập ở index.html)
   u.html       Trang link cá nhân của ứng viên
 DOCX/      Báo cáo thực tập (Word)
 Extra/     Tài liệu bổ sung
@@ -48,7 +48,7 @@ Bản demo chỉ hiện thực tầng giao diện: dữ liệu mẫu lưu trong 
 ## Yêu cầu môi trường và hướng dẫn chạy demo
 
 - Chỉ cần trình duyệt web hiện đại (Chrome, Edge, Firefox). Không cần cài đặt, không có cấu hình hay khóa bí mật.
-- **Xem trực tuyến:** mở https://nlinh1703.github.io/Bao-cao-thuc-tap-BA/Code/ (cổng quản trị: `.../Code/admin.html`).
+- **Xem trực tuyến:** mở https://nlinh1703.github.io/Bao-cao-thuc-tap-BA/Code/. Tất cả vai trò đăng nhập trên cùng một màn hình; tài khoản Admin được tự chuyển sang cổng quản trị.
 - **Chạy trên máy:** tải repository, sau đó trong thư mục `Code/` chạy `python -m http.server 8000` rồi mở `http://localhost:8000`.
 - Trang đăng nhập có nút đăng nhập nhanh theo vai trò; mật khẩu demo nhập bất kỳ. Nút "Khôi phục dữ liệu mẫu" đưa dữ liệu về trạng thái ban đầu.
 
@@ -58,7 +58,7 @@ Bản demo chỉ hiện thực tầng giao diện: dữ liệu mẫu lưu trong 
 | HR | thu.tm@company.vn |
 | CTV | han.pn@gmail.com |
 | Người giới thiệu | nam.dh@company.vn |
-| Admin | admin@company.vn (cổng quản trị) |
+| Admin | admin@company.vn |
 
 Toàn bộ tên công ty, ứng viên và số liệu trong demo là dữ liệu giả lập.
 
