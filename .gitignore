@@ -1,0 +1,22 @@
+# Office / hệ điều hành
+~$*
+*.tmp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# LaTeX (file sinh tự động khi biên dịch)
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.xdv
+
+# Môi trường / dependency
+node_modules/
+.vscode/
+.idea/
+.env
