@@ -772,9 +772,10 @@ VIEWS['ad-bao-cao']=()=>{
 };
 
 /* ===================== UI v4: form theo bản vận hành Excel ===================== */
-const WORK_O=['Đang tìm việc','Đang đi làm','Đang nghỉ việc chờ việc mới'];
-const ONB_O=['Ngay','Trong 1 tuần','Trong 2 tuần','Trong 1 tháng','Trên 1 tháng'];
-const EDU_O=['Đại học','Cao đẳng','Trung cấp','THPT','Sau đại học'];
+const WORK_O=['Đang tìm việc','Đang đi làm','Đang đi làm, muốn chuyển việc','Đang nghỉ việc','Sinh viên năm cuối'];
+const ONB_O=['Ngay','Sau 1 tuần','Sau 2 tuần','Sau 1 tháng','Cần báo trước công ty cũ 30 ngày'];
+const EDU_O=['THPT','Trung cấp','Cao đẳng','Đại học','Sau đại học','Đang học đại học'];
+const flex=(id,opts,v,ph)=>`<input id="${id}" data-k="${id}" list="${id}-l" value="${esc(v??'')}" placeholder="${ph}" autocomplete="off"><datalist id="${id}-l">${opts.map(o=>`<option value="${esc(o)}">`).join('')}</datalist>`;
 const sel=(id,opts,v,ph)=>`<select id="${id}" data-k="${id}">${ph?`<option value="">${ph}</option>`:''}${opt(opts).map(([a,b])=>`<option value="${esc(a)}" ${String(v??'')===String(a)?'selected':''}>${esc(b)}</option>`).join('')}</select>`;
 function cvForm(uc,title,desc){
   const me=acc(S.me);
@@ -844,12 +845,12 @@ VIEWS['hr-sang-loc']=()=>{
         <div class="field"><label for="sInd">Ngành / lĩnh vực đã làm ${req}</label><input id="sInd" data-k="sInd" value="${esc(f.sInd)}" placeholder="VD: Bán lẻ"></div>
         <div class="field"><label for="sGender">Giới tính ${req}</label>${sel('sGender',['Nữ','Nam'],f.sGender,'Chọn')}</div>
         <div class="field"><label for="sBirth">Năm sinh ${req}</label><input id="sBirth" data-k="sBirth" type="number" min="1960" max="2008" value="${esc(f.sBirth)}" placeholder="VD: 2000"></div>
-        <div class="field"><label for="sEdu">Trình độ ${req}</label>${sel('sEdu',EDU_O,f.sEdu,'Chọn')}</div>
-        <div class="field"><label for="sWork">Tình trạng hiện tại ${req}</label>${sel('sWork',WORK_O,f.sWork,'Chọn')}</div>
-        <div class="field"><label for="sOnb">Có thể nhận việc ${req}</label>${sel('sOnb',ONB_O,f.sOnb,'Chọn')}</div>
+        <div class="field"><label for="sEdu">Trình độ ${req}</label>${flex('sEdu',EDU_O,f.sEdu,'VD: Cao đẳng Kế toán')}</div>
+        <div class="field"><label for="sWork">Tình trạng hiện tại ${req}</label>${flex('sWork',WORK_O,f.sWork,'VD: Đang làm, muốn chuyển việc')}</div>
+        <div class="field"><label for="sOnb">Có thể nhận việc ${req}</label>${flex('sOnb',ONB_O,f.sOnb,'VD: Sau 15/12, cần báo trước 30 ngày')}</div>
         <div class="field"><label>Người sàng lọc · ngày</label><input value="${esc(acc(S.me).name)} · ${dshow(nowISO())}" disabled></div>
         <div class="field span3"><label for="sStr">Điểm mạnh nổi bật</label><textarea id="sStr" data-k="sStr" rows="2" placeholder="Hiển thị cho khách hàng ở phần xem trước">${esc(f.sStr)}</textarea></div>
-      </div><p class="hint">Các thông tin có dấu * sẽ hiển thị ở phần xem trước cho khách hàng.</p></div>
+      </div><p class="hint">Các thông tin có dấu * hiển thị ở phần xem trước cho khách hàng. Trình độ, tình trạng và thời điểm nhận việc có thể chọn gợi ý hoặc nhập tự do.</p></div>
       <div class="blk"><h3>Kết quả sàng lọc</h3>
       <div class="seg2" role="radiogroup" aria-label="Kết quả"><label><input type="radio" name="res" data-k="res" value="Đạt" ${f.res==='Đạt'?'checked':''}><span>${ICON.ok} Đạt</span></label><label><input type="radio" name="res" data-k="res" value="Không đạt" ${f.res==='Không đạt'?'checked':''}><span>${ICON.err} Không đạt</span></label></div>
       <div class="fgrid" style="margin-top:12px"><div class="field" ${f.res==='Không đạt'?'':'hidden'} id="rejWrap"><label for="sReason">Lý do không đạt ${req}</label>${sel('sReason',REJECT,f.sReason,'Chọn lý do')}</div>
