@@ -114,7 +114,7 @@ function payFail(o,date){S.payments.unshift({id:'TT'+(seq.pay++),order:o.id,gw:'
 /* ===================== NAV ===================== */
 const NAV={
   guest:[['dang-nhap','Đăng nhập','UC02'],['dang-ky','Đăng ký tài khoản','UC01']],
-  kh:[['kh-tim-kiem','Tìm kiếm CV','UC07'],['kh-gio','Đơn đang chọn','UC08'],['kh-don-hang','Đơn hàng & thanh toán','UC10'],['kh-cv','CV đã sở hữu','UC09']],
+  kh:[['kh-tim-kiem','Tìm kiếm CV','UC07'],['kh-gio','Đơn đang chọn','UC08'],['kh-don-hang','Đơn hàng','UC10'],['kh-cv','CV đã mua','UC09']],
   hr:[['hr-tao-cv','Tạo CV','UC04'],['hr-sang-loc','Sàng lọc CV','UC05'],['hr-cv','CV của tôi','UC06'],['hr-commission','Commission của tôi','UC11']],
   ctv:[['ctv-nop-cv','Nộp CV','UC04'],['ctv-cv','CV đã nộp',''],['ctv-commission','Commission của tôi','UC11']],
   ngt:[['ngt-link','Link & khách hàng','UC12'],['ngt-commission','Commission của tôi','UC11']],
@@ -195,7 +195,7 @@ VIEWS['dang-ky']=()=>{
   const t=S.ui.regType; const ref=S.ui.regRef;
   const refAcc=ref?S.accounts.find(a=>a.refCode===ref&&a.status==='Hoạt động'):null;
   return `<div class="auth">${head('UC01','Đăng ký tài khoản','Tài khoản Khách hàng dùng được ngay. Tài khoản CTV và Người giới thiệu (đối tác) chờ Admin duyệt.')}
-  ${ref?`<div class="note ${refAcc?'info':'warn'}">${refAcc?`Bạn đang đăng ký qua link giới thiệu của <b>${esc(refAcc.name)}</b> (mã <span class="mono">${esc(ref)}</span>).`:`Mã giới thiệu <span class="mono">${esc(ref)}</span> không hợp lệ hoặc đã bị vô hiệu. Bạn vẫn đăng ký được nhưng không được gắn Người giới thiệu.`}</div>`:''}
+  ${ref?(refAcc?notice('info','Bạn được giới thiệu bởi '+esc(refAcc.name),'Mã giới thiệu <span class="mono">'+esc(ref)+'</span> sẽ được ghi nhận khi bạn đăng ký tài khoản Khách hàng.'):notice('warn','Mã giới thiệu không còn hiệu lực','Bạn vẫn đăng ký bình thường, chỉ là tài khoản sẽ không gắn với người giới thiệu.')):''}
   <form class="panel stack" data-form="register">
     <div class="field"><label>Loại tài khoản</label><div class="seg" role="radiogroup">
       ${[['kh','Khách hàng'],['ctv','CTV'],['ngt','Người giới thiệu']].map(([k,l])=>`<button type="button" role="radio" aria-checked="${t===k}" class="${t===k?'on':''}" data-act="reg-type" data-v="${k}">${l}</button>`).join('')}</div></div>
@@ -262,7 +262,7 @@ VIEWS['kh-thanh-toan']=()=>{
   const o=S.orders.find(x=>x.id===S.ui.payOrder);
   if(S.ui.payResult){const r=S.ui.payResult;
     return head('UC10',r.ok?'Thanh toán thành công':'Thanh toán không thành công',r.ok?'Hệ thống đã xác thực kết quả từ cổng thanh toán và xử lý đơn hàng.':'Đơn hàng vẫn ở trạng thái Chờ thanh toán. Doanh thu không được ghi nhận, CV chưa được mở khóa.')+
-    `<div class="panel stack">${r.ok?`<ul class="steps">${r.steps.map((s,i)=>`<li><span class="d">${i+1}</span><span>${esc(s)}</span></li>`).join('')}</ul>`:`<div class="note err">Cổng thanh toán trả về kết quả thất bại hoặc khách hàng hủy giao dịch.</div>`}
+    `<div class="panel stack">${r.ok?`<ul class="steps">${r.steps.map((s,i)=>`<li><span class="d">${i+1}</span><span>${esc(s)}</span></li>`).join('')}</ul>`:notice('err','Thanh toán chưa thành công','Giao dịch bị hủy hoặc cổng thanh toán từ chối. Bạn chưa bị trừ tiền, đơn hàng vẫn được giữ để thanh toán lại.')}
     <div class="row">${r.ok?`<button class="btn pri" data-go="kh-cv">Xem CV đã mua</button>`:`<button class="btn pri" data-act="pay" data-id="${r.order}">Thanh toán lại</button>`}<button class="btn" data-act="pay-done">Về danh sách đơn</button></div></div>`;}
   if(!o) return VIEWS['kh-don-hang']();
   const cells=[];let x=o.id.split('').reduce((a,c)=>a*31+c.charCodeAt(0),7);
@@ -342,7 +342,7 @@ function hrDetail(c){
   ${can?`<div class="otw-row"><div><b>${c.otw?'Đang bật':'Đang tắt'}</b><div class="small muted">${c.otwBy?`Cập nhật bởi ${esc(c.otwBy)} · ${dshow(c.otwAt)}`:'Ứng viên chưa xác nhận'}</div></div></div>
   <label class="check"><input type="checkbox" id="hrConfirm"><span>Tôi đã liên hệ trực tiếp và ứng viên xác nhận thay đổi này.</span></label>
   <div id="hrOtwErr"></div><div class="row"><button class="btn pri" data-act="hr-otw" data-id="${c.id}">${c.otw?'Tắt Open to Work':'Bật Open to Work'}</button><button class="btn" data-act="uv-open" data-id="${c.id}">Mở link cá nhân của ứng viên</button></div>`
-  :`<div class="note warn">Chỉ CV đã sàng lọc Đạt mới có trạng thái Open to Work.</div>`}</div>`);
+  :notice('info','Chưa thể cập nhật Open to Work','Chỉ CV đã sàng lọc Đạt mới có trạng thái Open to Work.')}</div>`);
 }
 /* ---------- COMMISSION ---------- */
 function commissionView(){
@@ -444,7 +444,7 @@ VIEWS['uv-link']=()=>{
    <select id="uvPick" data-act="uv-pick" style="width:100%;margin-top:6px;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--surface)">${S.cvs.filter(x=>x.status==='Đạt').map(x=>`<option value="${x.token}" ${x.token===S.uvToken?'selected':''}>${x.code} · ${esc(x.name)}</option>`).join('')}<option value="bad" ${S.uvToken==='bad'?'selected':''}>Link không hợp lệ</option></select></div>`;
   const url=`https://cvmarketplace.vn/u/${esc(S.uvToken||'')}`;
   if(!c) return head('UC06','Trang link cá nhân','Trang ứng viên mở từ link gửi qua Zalo OA / Email, không cần đăng nhập.')+picker+
-    `<div class="phone"><div class="small muted mono">${url}</div><div class="note err">Link không hợp lệ hoặc đã hết hiệu lực. Vui lòng liên hệ HR phụ trách để được gửi lại link.</div></div>`;
+    `<div class="phone"><div class="small muted mono">${url}</div>${notice('err','Link không còn hiệu lực','Link có thể đã hết hạn hoặc bị nhập sai. Vui lòng liên hệ HR đã gửi link để được cấp lại.')}</div>`;
   return head('UC06','Trang link cá nhân','Trang ứng viên mở từ link gửi qua Zalo OA / Email, không cần đăng nhập. Chỉ cho phép bật hoặc tắt Open to Work.')+picker+
   `<div class="phone"><div class="small muted mono" style="overflow-wrap:anywhere">${url}</div>
   <div><div class="small muted">Xin chào</div><h2>${esc(c.name)}</h2><div class="small muted">Hồ sơ <span class="mono">${c.code}</span> · ${POS[c.pos]}</div></div>
@@ -859,6 +859,23 @@ VIEWS['hr-sang-loc']=()=>{
   </section></div>`;
 };
 
+/* ===================== UI v5: rà theo nguyên tắc UI chung ===================== */
+function confirmBox(title,text,ok,act,id,danger){
+  document.getElementById('overlay').innerHTML=`<div class="scrim center" data-act="close-scrim"><div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="mdT">
+  <div class="md-ic ${danger?'bad':''}">${danger?ICON.warn:ICON.info}</div><h2 id="mdT">${title}</h2><p class="muted">${text}</p>
+  <div class="row md-act"><button class="btn" data-act="close">Hủy</button><button class="btn ${danger?'dangerf':'pri'}" data-act="${act}" data-id="${id}" autofocus>${ok}</button></div></div></div>`;
+  setTimeout(()=>document.querySelector('.modal [autofocus]')?.focus(),30);
+}
+VIEWS['kh-gio']=()=>{
+  const items=S.cart.map(cvById); const n=items.length, ok=n>=S.cfg.minCV, need=S.cfg.minCV-n;
+  const hd=head('UC08','Giỏ CV',`Mỗi đơn hàng cần tối thiểu ${S.cfg.minCV} CV.`);
+  if(!n) return hd+`<div class="empty2">${ICON.cart}<h3>Giỏ CV đang trống</h3><p class="muted">Tìm và thêm những hồ sơ phù hợp để đặt mua.</p><button class="btn pri" data-go="kh-tim-kiem">Tìm CV</button></div>`;
+  return hd+`<div class="cart2"><div class="stack">${items.map(c=>`<div class="ci"><span class="av lg">${c.pos}</span><div style="flex:1;min-width:0"><b>${POS[c.pos]}</b><div class="small muted"><span class="mono">${c.code}</span> · ${c.area} · ${c.exp} năm kinh nghiệm</div></div><span class="num">${fmt(S.cfg.price)}</span><button class="btn ghost sm" data-act="cart-del" data-id="${c.id}" aria-label="Bỏ ${c.code} khỏi giỏ">Bỏ</button></div>`).join('')}</div>
+  <aside class="panel sum"><h2>Tóm tắt đơn hàng</h2><div class="sr"><span>Số CV</span><b>${n}</b></div><div class="sr"><span>Đơn giá</span><span class="num">${fmt(S.cfg.price)}</span></div><div class="sr tot"><span>Tổng cộng</span><b class="num">${fmt(n*S.cfg.price)}</b></div>
+  ${ok?notice('ok','Đủ điều kiện đặt mua','Bạn sẽ thanh toán ở bước tiếp theo.'):notice('info',`Thêm ${need} CV nữa để đặt mua`,`Đơn hàng tối thiểu ${S.cfg.minCV} CV.`)}
+  <button class="btn pri big" data-act="create-order" ${ok?'':'disabled aria-disabled="true"'}>Đặt mua ${n} CV</button><button class="btn ghost" data-go="kh-tim-kiem">Chọn thêm CV</button></aside></div>`;
+};
+
 /* ===================== EVENTS ===================== */
 document.addEventListener('click',e=>{
   const g=e.target.closest('[data-go]'); if(g){e.preventDefault();closeOverlay();go(g.dataset.go);return}
@@ -895,13 +912,15 @@ document.addEventListener('click',e=>{
     dl:()=>toast(`Demo: tải ${cvById(id).code}_CV.pdf (không có file thật)`),
     'cv-sample':()=>{const f=(i,val)=>{const el=document.getElementById(i);if(el)el.value=val};f('cName','Phan Thị Yến');f('cPhone','0987 654 321');f('cEmail','yen.pt@gmail.com');f('cPos','CS');f('cArea','TP. HCM');f('cMemo','Ứng viên từng làm tổng đài ngân hàng');document.getElementById('cConsent').checked=true;const fi=document.getElementById('cFile');if(fi)fi.required=false;toast('Đã điền dữ liệu mẫu (bỏ qua file CV trong demo)')},
     'hr-open':()=>drawer(hrDetail(cvById(id))),
-    'hr-otw':()=>{const c=cvById(id);if(!document.getElementById('hrConfirm').checked){document.getElementById('hrOtwErr').innerHTML='<div class="note err">Xác nhận đã liên hệ với ứng viên trước khi cập nhật thay.</div>';return}
+    'hr-otw':()=>{const c=cvById(id);if(!document.getElementById('hrConfirm').checked){document.getElementById('hrOtwErr').innerHTML=notice('warn','Vui lòng xác nhận trước','Đánh dấu ô xác nhận đã liên hệ với ứng viên trước khi cập nhật thay.');return}
       c.otw=!c.otw;c.otwBy=acc(S.me).name+' (HR)';c.otwAt=nowISO();drawer(hrDetail(c));render();drawer(hrDetail(c));toast(`${c.code}: Open to Work ${c.otw?'đã bật':'đã tắt'}`)},
     'uv-open':()=>{window.open('u.html?t='+cvById(id).token,'_blank','noopener')},
     'com-filter':()=>{S.ui.comFilter=v;render()},
     'copy-ref':()=>{const el=document.getElementById('refLink');try{navigator.clipboard.writeText(el.value).then(()=>toast('Đã sao chép link giới thiệu'),()=>{el.select();toast('Đã chọn link, nhấn Ctrl+C để sao chép')})}catch(_){el.select();toast('Đã chọn link, nhấn Ctrl+C để sao chép')}},
     tab:()=>{S.ui.tab=v;render()},
-    lock:()=>{const x=acc(id);x.status='Bị khóa';render();toast(`Đã khóa tài khoản ${x.name}`)},
+    lock:()=>{const x=acc(id);confirmBox('Khóa tài khoản này?',`<b>${esc(x.name)}</b> sẽ không đăng nhập được cho đến khi được mở khóa. Dữ liệu và commission đã có vẫn được giữ nguyên.`,'Khóa tài khoản','lock-do',id,true)},
+    'lock-do':()=>{const x=acc(id);x.status='Bị khóa';closeOverlay();render();toast(`Đã khóa tài khoản ${x.name}`)},
+    'reject-do':()=>{const a=acc(id),reason=S.ui.rejReason||'';a.status='Từ chối';a.reason=reason;notify(a.name,'Email','Tài khoản bị từ chối: '+reason);closeOverlay();render();toast(`Đã từ chối đăng ký của ${a.name}`)},
     unlock:()=>{const x=acc(id);x.status='Hoạt động';render();toast(`Đã mở khóa tài khoản ${x.name}`)},
     'uv-toggle':()=>{const c=S.cvs.find(x=>x.token===S.uvToken);c.otw=!c.otw;c.otwBy='Ứng viên';c.otwAt=nowISO();render();toast(c.otw?'Đã bật Open to Work. Hồ sơ được đưa vào nguồn khả dụng.':'Đã tắt Open to Work. Hồ sơ ngừng hiển thị với doanh nghiệp mới.')}
   };
@@ -916,6 +935,7 @@ document.addEventListener('change',e=>{
   if(t.closest('[data-form="filter"]')){Object.assign(S.ui,{pos:val('fpos'),area:val('farea'),exp:val('fexp'),sal:val('fsal')});render()}
 });
 document.addEventListener('input',e=>{const t=e.target;
+  if(t.getAttribute&&t.getAttribute('aria-invalid')==='true'){t.removeAttribute('aria-invalid');const box=t.closest('form')?.querySelector('[id^="ae-"],#slErr,#cvErr,#rgErr,#gErr,#kErr,#aErr');if(box&&!t.closest('form').querySelector('[aria-invalid="true"]'))box.innerHTML=''}
   if(t.closest&&t.closest('[data-form="screen2"]')&&t.dataset.k){S.ui.slForm=S.ui.slForm||{};if(t.type!=='radio'||t.checked)S.ui.slForm[t.dataset.k]=t.value;if(t.name==='res'){document.getElementById('rejWrap').hidden=t.value!=='Không đạt'}return}
   if(t.dataset&&t.dataset.f&&t.tagName==='INPUT'){const [k,fd]=t.dataset.f.split('.');F(k)[fd]=t.value;const id=t.id;clearTimeout(window.__ft);window.__ft=setTimeout(()=>{render();const el=document.getElementById(id);if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}},250);return}
 if(e.target.id==='fq'){S.ui.q=e.target.value;clearTimeout(window.__qt);window.__qt=setTimeout(()=>{render();const el=document.getElementById('fq');el.focus();el.setSelectionRange(el.value.length,el.value.length)},250)}});
@@ -956,6 +976,7 @@ document.addEventListener('submit',e=>{
     const c=cvById(f.dataset.id), fm=S.ui.slForm||{};
     if(!fm.res)return document.getElementById('slErr').innerHTML=notice('warn','Bạn chưa chọn kết quả','Chọn Đạt hoặc Không đạt trước khi lưu.');
     if(fm.res==='Đạt'){const miss=[['sExp','Kinh nghiệm'],['sSal','Mức lương mong muốn'],['sInd','Ngành'],['sGender','Giới tính'],['sBirth','Năm sinh'],['sEdu','Trình độ'],['sWork','Tình trạng hiện tại'],['sOnb','Có thể nhận việc']].filter(([k])=>fm[k]===''||fm[k]==null).map(x=>x[1]);
+      if(miss.length){[['sExp'],['sSal'],['sInd'],['sGender'],['sBirth'],['sEdu'],['sWork'],['sOnb']].forEach(([k])=>{const el=document.getElementById(k);if(el)el.setAttribute('aria-invalid',fm[k]===''||fm[k]==null?'true':'false')});document.querySelector('[aria-invalid="true"]')?.focus()}
       if(miss.length)return document.getElementById('slErr').innerHTML=notice('warn','Còn thiếu thông tin để đăng CV','Vui lòng nhập: '+miss.join(', ')+'. Các thông tin này hiển thị cho khách hàng khi xem trước.');}
     if(fm.res==='Không đạt'&&!fm.sReason)return document.getElementById('slErr').innerHTML=notice('warn','Bạn chưa chọn lý do không đạt','Chọn một lý do để HR khác có thể tra cứu sau này.');
     Object.assign(c,{exp:fm.sExp===''?null:+fm.sExp,salary:fm.sSal===''?null:+fm.sSal,industry:fm.sInd||'',gender:fm.sGender||'',birth:fm.sBirth?+fm.sBirth:null,edu:fm.sEdu||'',workStatus:fm.sWork||'',onboard:fm.sOnb||'',strengths:fm.sStr||'',
@@ -970,9 +991,9 @@ document.addEventListener('submit',e=>{
     render();return}
   if(kind==='approve'){
     const a=acc(f.dataset.id), r=sub?.dataset.v, reason=document.getElementById('rj-'+a.id).value.trim();
-    if(r==='no'&&!reason)return err('ae-'+a.id,'Nhập lý do từ chối trước khi xác nhận.');
+    if(r==='no'&&!reason){document.getElementById('rj-'+a.id).setAttribute('aria-invalid','true');return document.getElementById('ae-'+a.id).innerHTML=notice('warn','Bạn chưa nhập lý do từ chối','Lý do sẽ được gửi kèm email cho người đăng ký.')}
     if(r==='ok'){a.status='Hoạt động';if(a.role==='ngt')a.refCode=a.name.split(' ').pop().toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/Đ/g,'D')+Math.floor(10+Math.random()*89);notify(a.name,'Email','Tài khoản đã được duyệt'+(a.refCode?`, link giới thiệu: ${a.refCode}`:''));toast(`Đã duyệt ${a.name}${a.refCode?' · tạo link giới thiệu '+a.refCode:''}`)}
-    else{a.status='Từ chối';a.reason=reason;notify(a.name,'Email','Tài khoản bị từ chối: '+reason);toast(`Đã từ chối ${a.name}`)}
+    else{S.ui.rejReason=reason;return confirmBox('Từ chối đăng ký này?',`<b>${esc(a.name)}</b> sẽ nhận email thông báo kèm lý do: “${esc(reason)}”.`,'Từ chối đăng ký','reject-do',a.id,true)}
     render();return}
   if(kind==='grant'){
     const email=val('gEmail');if(S.accounts.some(x=>x.email.toLowerCase()===email.toLowerCase()))return err('gErr','Email đã tồn tại.');
@@ -994,7 +1015,8 @@ document.addEventListener('submit',e=>{
     if(nc!==c.screener)S.attrLog.unshift({at:nowISO(),code:c.code,role:'Screener',old:acc(c.screener)?.name||'—',neu:acc(nc)?.name||'—',reason,by});
     c.source=ns;c.screener=nc;render();toast(`Đã điều chỉnh ${c.code} và lưu lịch sử`);return}
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlay()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeOverlay();document.querySelectorAll('details.tb-user[open]').forEach(d=>d.open=false)}});
+document.addEventListener('click',e=>{document.querySelectorAll('details.tb-user[open]').forEach(d=>{if(!d.contains(e.target))d.open=false})},true);
 
 /* ===================== BOOT ===================== */
 if(!restore()) seed();
