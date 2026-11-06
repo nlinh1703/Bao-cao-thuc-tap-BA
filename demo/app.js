@@ -788,6 +788,7 @@ function cvForm(uc,title,desc){
     <div class="field"><label for="cPhone">Số điện thoại <i>*</i></label><input id="cPhone" required inputmode="tel" placeholder="09xx xxx xxx"></div>
     <div class="field"><label for="cEmail">Email</label><input id="cEmail" type="email" placeholder="Để gửi thông báo cho ứng viên"></div>
     <div class="field"><label for="cZalo">Số Zalo</label><input id="cZalo" placeholder="Nếu khác số điện thoại"></div>
+    <div class="field"><label for="cBirth">Năm sinh</label><input id="cBirth" type="number" min="1960" max="2008" placeholder="Nếu biết, VD: 2000"><span class="hint">Không bắt buộc. HR sẽ bổ sung khi sơ vấn.</span></div>
     <div class="field"><label for="cPos">Vị trí ứng tuyển <i>*</i></label><select id="cPos" required>${posOpts('','Chọn vị trí')}</select></div>
     <div class="field"><label for="cArea">Khu vực <i>*</i></label><select id="cArea" required>${areaOpts('','Chọn khu vực')}</select></div>
     <div class="field span2"><label for="cFile">File CV <i>*</i></label><input id="cFile" type="file" accept=".pdf,.doc,.docx" required><span class="hint">PDF hoặc Word, tối đa 5 MB. Demo không lưu file thật.</span></div>
@@ -831,7 +832,7 @@ VIEWS['hr-sang-loc']=()=>{
     ${dup?notice('warn','Có thể trùng ứng viên',`SĐT hoặc email trùng với hồ sơ <b>${dup.code}</b> (${esc(dup.name)}). Kiểm tra trước khi đánh giá.`):notice('ok','Không phát hiện hồ sơ trùng','Đã đối chiếu số điện thoại và email với toàn bộ CV trong hệ thống.')}
     <div class="blk"><h3>Thông tin người tạo nguồn nhập</h3><dl class="kv2">
       <dt>Người tạo nguồn</dt><dd>${esc(src?.name)} <span class="small muted">(${ROLE_NAME[src?.role]})</span></dd>
-      <dt>Họ và tên ứng viên</dt><dd>${esc(c.name)}</dd><dt>Số điện thoại</dt><dd>${c.phone}</dd><dt>Email</dt><dd>${esc(c.email)||'—'}</dd>
+      <dt>Họ và tên ứng viên</dt><dd>${esc(c.name)}</dd><dt>Năm sinh</dt><dd>${c.srcBirth?c.srcBirth:'<span class="muted">Chưa có, HR bổ sung khi sơ vấn</span>'}</dd><dt>Số điện thoại</dt><dd>${c.phone}</dd><dt>Email</dt><dd>${esc(c.email)||'—'}</dd>
       <dt>Vị trí ứng tuyển</dt><dd>${POS[c.pos]}</dd><dt>Khu vực</dt><dd>${c.area}</dd>
       <dt>File CV</dt><dd><button type="button" class="link" data-act="cv-view" data-id="${c.id}">📄 ${c.code}_CV.pdf</button></dd>
       <dt>Đồng ý khai thác</dt><dd>${c.consent?'<span class="pill p-ok">Có</span>':'<span class="pill p-bad">Chưa</span>'}</dd>
@@ -910,7 +911,7 @@ document.addEventListener('click',e=>{
     'gw-fail':()=>{const o=S.orders.find(x=>x.id===S.ui.payOrder);payFail(o);S.ui.payResult={ok:false,order:o.id};render()},
     'pay-done':()=>{S.ui.payResult=null;go('kh-don-hang')},
     dl:()=>toast(`Demo: tải ${cvById(id).code}_CV.pdf (không có file thật)`),
-    'cv-sample':()=>{const f=(i,val)=>{const el=document.getElementById(i);if(el)el.value=val};f('cName','Phan Thị Yến');f('cPhone','0987 654 321');f('cEmail','yen.pt@gmail.com');f('cPos','CS');f('cArea','TP. HCM');f('cMemo','Ứng viên từng làm tổng đài ngân hàng');document.getElementById('cConsent').checked=true;const fi=document.getElementById('cFile');if(fi)fi.required=false;toast('Đã điền dữ liệu mẫu (bỏ qua file CV trong demo)')},
+    'cv-sample':()=>{const f=(i,val)=>{const el=document.getElementById(i);if(el)el.value=val};f('cName','Phan Thị Yến');f('cPhone','0987 654 321');f('cEmail','yen.pt@gmail.com');f('cPos','CS');f('cArea','TP. HCM');f('cMemo','Ứng viên từng làm tổng đài ngân hàng');f('cBirth','');document.getElementById('cConsent').checked=true;const fi=document.getElementById('cFile');if(fi)fi.required=false;toast('Đã điền dữ liệu mẫu (bỏ qua file CV trong demo)')},
     'hr-open':()=>drawer(hrDetail(cvById(id))),
     'hr-otw':()=>{const c=cvById(id);if(!document.getElementById('hrConfirm').checked){document.getElementById('hrOtwErr').innerHTML=notice('warn','Vui lòng xác nhận trước','Đánh dấu ô xác nhận đã liên hệ với ứng viên trước khi cập nhật thay.');return}
       c.otw=!c.otw;c.otwBy=acc(S.me).name+' (HR)';c.otwAt=nowISO();drawer(hrDetail(c));render();drawer(hrDetail(c));toast(`${c.code}: Open to Work ${c.otw?'đã bật':'đã tắt'}`)},
@@ -970,7 +971,7 @@ document.addEventListener('submit',e=>{
     const dup=S.cvs.find(c=>c.phone.replace(/\s/g,'')===ph||(em&&c.email.toLowerCase()===em));
     if(dup)return document.getElementById('cvErr').innerHTML=notice('warn','Ứng viên này đã có trong hệ thống',`Số điện thoại hoặc email trùng với hồ sơ <b>${dup.code}</b>. Bạn không cần tạo thêm CV mới.`);
     const pos=val('cPos');const n=S.cvs.filter(c=>c.pos===pos).length+1;
-    const c={id:'cv'+(seq.id++),code:pos+'-'+String(n).padStart(3,'0'),pos,name:val('cName'),birth:null,gender:'',area:val('cArea'),exp:null,salary:null,edu:'',strengths:'',industry:'',phone:val('cPhone'),email:val('cEmail'),zalo:val('cZalo'),memo:val('cMemo'),workStatus:'',onboard:'',source:S.me,screener:null,status:'Chờ sàng lọc',otw:false,note:'',token:'u'+Math.floor(80000+Math.random()*9999),consent:true,created:nowISO(),otwBy:null,otwAt:null};
+    const c={id:'cv'+(seq.id++),code:pos+'-'+String(n).padStart(3,'0'),pos,name:val('cName'),birth:val('cBirth')?+val('cBirth'):null,srcBirth:val('cBirth')?+val('cBirth'):null,gender:'',area:val('cArea'),exp:null,salary:null,edu:'',strengths:'',industry:'',phone:val('cPhone'),email:val('cEmail'),zalo:val('cZalo'),memo:val('cMemo'),workStatus:'',onboard:'',source:S.me,screener:null,status:'Chờ sàng lọc',otw:false,note:'',token:'u'+Math.floor(80000+Math.random()*9999),consent:true,created:nowISO(),otwBy:null,otwAt:null};
     S.cvs.push(c);toast(`Đã ${S.role==='hr'?'tạo':'nộp'} ${c.code}, đang chờ HR sàng lọc`);go(S.role==='hr'?'hr-sang-loc':'ctv-cv');return}
   if(kind==='screen2'){
     const c=cvById(f.dataset.id), fm=S.ui.slForm||{};
