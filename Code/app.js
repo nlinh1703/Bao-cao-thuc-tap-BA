@@ -56,7 +56,7 @@ function seed(){
       token:'u'+(73120+i*17),consent:true,created:'2026-'+(i<6?'09':'10')+'-'+String(5+i).padStart(2,'0'),otwBy:otw?'Ứng viên':null,otwAt:otw?'2026-10-12':null};
   });
   cvs.forEach(c=>{if(c.status==='Chờ sàng lọc')Object.assign(c,{exp:null,salary:null,edu:'',strengths:'',industry:'',gender:'',birth:null,workStatus:'',onboard:'',memo:'Ứng viên còn nhu cầu, cần HR gọi xác nhận lương mong muốn'})});
-  S={cfg,cfgLog:[{at:'2026-10-01',by:'Admin vận hành',text:'Giá 100.000 đ/CV · tối thiểu 5 CV · Source 3% · Screener 2% · Referral 5%'}],
+  S={cfg,cfgLog:[{at:'2026-10-01',by:'Admin vận hành',text:'Phí mở 100.000 đ/CV · tối thiểu 5 CV · Source 3% · Screener 2% · Referral 5%'}],
      accounts,cvs,orders:[],payments:[],handovers:[],commissions:[],notis:[],attrLog:[],
      role:'guest',me:null,cart:[],route:'',uvToken:null,
      ui:{q:'',pos:'',area:'',exp:'',sal:'',tab:'pending',regType:'kh',regRef:'',comFilter:'all',login:null}};
@@ -114,7 +114,7 @@ function payFail(o,date){S.payments.unshift({id:'TT'+(seq.pay++),order:o.id,gw:'
 /* ===================== NAV ===================== */
 const NAV={
   guest:[['dang-nhap','Đăng nhập','UC02'],['dang-ky','Đăng ký tài khoản','UC01']],
-  kh:[['kh-tim-kiem','Tìm kiếm CV','UC07'],['kh-gio','Đơn đang chọn','UC08'],['kh-don-hang','Đơn hàng','UC10'],['kh-cv','CV đã mua','UC09']],
+  kh:[['kh-tim-kiem','Tìm kiếm CV','UC07'],['kh-gio','Đơn đang chọn','UC08'],['kh-don-hang','Đơn hàng','UC10'],['kh-cv','CV đã mở','UC09']],
   hr:[['hr-tao-cv','Tạo CV','UC04'],['hr-sang-loc','Sàng lọc CV','UC05'],['hr-cv','CV của tôi','UC06'],['hr-commission','Commission của tôi','UC11']],
   ctv:[['ctv-nop-cv','Nộp CV','UC04'],['ctv-cv','CV đã nộp',''],['ctv-commission','Commission của tôi','UC11']],
   ngt:[['ngt-link','Link & khách hàng','UC12'],['ngt-commission','Commission của tôi','UC11']],
@@ -215,15 +215,15 @@ VIEWS['dang-ky']=()=>{
 /* ---------- CUSTOMER ---------- */
 function cvCard(c,mine){
   const sel=S.cart.includes(c.id);
-  return `<article class="cv ${sel?'sel':''}"><div class="cv-top"><div><div class="code">${c.code}</div><h3>${POS[c.pos]}</h3></div>${mine?'<span class="pill p-ok">Đã sở hữu</span>':''}</div>
+  return `<article class="cv ${sel?'sel':''}"><div class="cv-top"><div><div class="code">${c.code}</div><h3>${POS[c.pos]}</h3></div>${mine?'<span class="pill p-ok">Đã mở</span>':''}</div>
   <dl><dt>Kinh nghiệm</dt><dd class="num">${c.exp?c.exp+' năm':'Chưa có'} · ${esc(c.industry)}</dd><dt>Khu vực</dt><dd>${c.area}</dd><dt>Giới tính</dt><dd>${c.gender} · ${c.birth}</dd><dt>Trình độ</dt><dd>${c.edu}</dd><dt>Lương mong muốn</dt><dd class="num">${c.salary} triệu</dd></dl>
   <div class="cv-foot"><button class="link small" data-act="preview" data-id="${c.id}">Xem preview</button>
-  ${mine?`<button class="btn sm" data-go="kh-cv">Mở CV</button>`:sel?`<button class="btn sm" data-act="cart-del" data-id="${c.id}">Bỏ chọn</button>`:`<button class="btn sm pri" data-act="cart-add" data-id="${c.id}">Chọn mua</button>`}</div></article>`;
+  ${mine?`<button class="btn sm" data-go="kh-cv">Mở CV</button>`:sel?`<button class="btn sm" data-act="cart-del" data-id="${c.id}">Bỏ chọn</button>`:`<button class="btn sm pri" data-act="cart-add" data-id="${c.id}">Chọn CV</button>`}</div></article>`;
 }
 VIEWS['kh-tim-kiem']=()=>{
   const u=S.ui; const mine=owned(S.me);
   let list=S.cvs.filter(available).filter(c=>(!u.pos||c.pos===u.pos)&&(!u.area||c.area===u.area)&&(!u.exp||c.exp>=+u.exp)&&(!u.sal||c.salary<=+u.sal)&&(!u.q||(c.code+' '+POS[c.pos]+' '+c.industry+' '+c.strengths).toLowerCase().includes(u.q.toLowerCase())));
-  return head('UC07','Tìm kiếm <em>CV</em>','Chỉ hiển thị CV đã được HR sàng lọc đạt và ứng viên đang bật Open to Work. Thông tin liên hệ được mở sau khi thanh toán.',`<div class="row"><span class="small muted">Giá</span><span class="price">${fmt(S.cfg.price)}/CV</span><span class="small muted">· tối thiểu ${S.cfg.minCV} CV/đơn</span></div>`)+
+  return head('UC07','Tìm kiếm <em>CV</em>','Chỉ hiển thị CV đã được HR sàng lọc đạt và ứng viên đang bật Open to Work. Thông tin liên hệ được mở sau khi thanh toán.',`<div class="row"><span class="small muted">Phí mở</span><span class="price">${fmt(S.cfg.price)}/CV</span><span class="small muted">· tối thiểu ${S.cfg.minCV} CV/đơn</span></div>`)+
   `<form class="panel filters" data-form="filter">
     <div class="field q"><label for="fq">Từ khóa</label><input id="fq" value="${esc(u.q)}" placeholder="Mã CV, ngành, kỹ năng…"></div>
     <div class="field"><label for="fpos">Vị trí</label><select id="fpos">${posOpts(u.pos)}</select></div>
@@ -242,8 +242,8 @@ function previewHTML(c){
 }
 VIEWS['kh-gio']=()=>{
   const items=S.cart.map(cvById); const n=items.length; const ok=n>=S.cfg.minCV;
-  return head('UC08','Đơn đang chọn',`Đơn hàng cần tối thiểu ${S.cfg.minCV} CV. CV đã sở hữu không thể mua lại.`)+
-  (n?`<div class="tw"><table><thead><tr><th>Mã CV</th><th>Vị trí</th><th>Khu vực</th><th class="r">Đơn giá</th><th></th></tr></thead><tbody>
+  return head('UC08','Đơn đang chọn',`Đơn hàng cần tối thiểu ${S.cfg.minCV} CV. CV đã mở không cần mở lại.`)+
+  (n?`<div class="tw"><table><thead><tr><th>Mã CV</th><th>Vị trí</th><th>Khu vực</th><th class="r">Phí mở</th><th></th></tr></thead><tbody>
   ${items.map(c=>`<tr><td class="mono">${c.code}</td><td>${POS[c.pos]}</td><td>${c.area}</td><td class="r num">${fmt(S.cfg.price)}</td><td class="r"><button class="link small" data-act="cart-del" data-id="${c.id}">Bỏ</button></td></tr>`).join('')}
   </tbody></table></div>
   <div class="panel row" style="justify-content:space-between">
@@ -265,7 +265,7 @@ VIEWS['kh-thanh-toan']=()=>{
   if(S.ui.payResult){const r=S.ui.payResult;
     return head('UC10',r.ok?'Thanh toán thành công':'Thanh toán không thành công',r.ok?'Hệ thống đã xác thực kết quả từ cổng thanh toán và xử lý đơn hàng.':'Đơn hàng vẫn ở trạng thái Chờ thanh toán. Doanh thu không được ghi nhận, CV chưa được mở khóa.')+
     `<div class="panel stack">${r.ok?`<ul class="steps">${r.steps.map((s,i)=>`<li><span class="d">${i+1}</span><span>${esc(s)}</span></li>`).join('')}</ul>`:notice('err','Thanh toán chưa thành công','Giao dịch bị hủy hoặc cổng thanh toán từ chối. Bạn chưa bị trừ tiền, đơn hàng vẫn được giữ để thanh toán lại.')}
-    <div class="row">${r.ok?`<button class="btn pri" data-go="kh-cv">Xem CV đã mua</button>`:`<button class="btn pri" data-act="pay" data-id="${r.order}">Thanh toán lại</button>`}<button class="btn" data-act="pay-done">Về danh sách đơn</button></div></div>`;}
+    <div class="row">${r.ok?`<button class="btn pri" data-go="kh-cv">Xem CV đã mở</button>`:`<button class="btn pri" data-act="pay" data-id="${r.order}">Thanh toán lại</button>`}<button class="btn" data-act="pay-done">Về danh sách đơn</button></div></div>`;}
   if(!o) return VIEWS['kh-don-hang']();
   const cells=[];let x=o.id.split('').reduce((a,c)=>a*31+c.charCodeAt(0),7);
   for(let i=0;i<441;i++){const r=Math.floor(i/21),c=i%21;const finder=(r<7&&c<7)||(r<7&&c>13)||(r>13&&c<7);
@@ -279,10 +279,10 @@ VIEWS['kh-thanh-toan']=()=>{
 };
 VIEWS['kh-cv']=()=>{
   const hs=S.handovers.filter(h=>h.customer===S.me);
-  return head('UC09','CV đã sở hữu','Thông tin đầy đủ và file CV của các CV đã thanh toán.')+
+  return head('UC09','CV đã mở','Thông tin đầy đủ và file CV của các CV đã thanh toán.')+
   (hs.length?`<div class="tw"><table><thead><tr><th>Mã CV</th><th>Ứng viên</th><th>Vị trí</th><th>Liên hệ</th><th>Ngày nhận</th><th></th></tr></thead><tbody>
   ${hs.map(h=>{const c=cvById(h.cv);return `<tr><td class="mono">${c.code}</td><td>${esc(c.name)}</td><td>${POS[c.pos]}</td><td class="small">${c.phone}<br>${esc(c.email)}</td><td class="num">${dshow(h.at)}</td><td class="r"><div class="row" style="justify-content:flex-end"><button class="btn sm" data-act="full" data-id="${c.id}">Xem CV</button><button class="btn sm" data-act="dl" data-id="${c.id}">Tải file</button></div></td></tr>`}).join('')}
-  </tbody></table></div>`:`<div class="panel empty">Chưa sở hữu CV nào.</div>`);
+  </tbody></table></div>`:`<div class="panel empty">Chưa mở CV nào.</div>`);
 };
 function fullHTML(c,extra=''){
   return `<div class="drawer-h"><div><div class="code">${c.code}</div><h2>${esc(c.name)}</h2><div class="small muted">${POS[c.pos]} · ${pill(c.status)} ${otwPill(c)}</div></div><button class="btn sm" data-act="close">Đóng</button></div>
@@ -315,13 +315,13 @@ function cvForm(uc,title,desc){
   <div class="row"><button class="btn pri">${S.role==='hr'?'Tạo CV':'Nộp CV'}</button><button type="button" class="btn" data-act="cv-sample">Điền dữ liệu mẫu</button></div></form>`;
 }
 VIEWS['hr-tao-cv']=()=>cvForm('UC04','Tạo CV','CV mới ở trạng thái Chờ sàng lọc, bạn được ghi nhận là Source.');
-VIEWS['ctv-nop-cv']=()=>cvForm('UC04','Nộp CV','CV được HR sàng lọc trước khi đưa vào nguồn khả dụng. Bạn được ghi nhận là Source và nhận commission khi CV được bán.');
+VIEWS['ctv-nop-cv']=()=>cvForm('UC04','Nộp CV','CV được HR sàng lọc trước khi đưa vào nguồn khả dụng. Bạn được ghi nhận là Source và nhận commission khi CV được mở.');
 VIEWS['ctv-cv']=()=>{
   const list=S.cvs.filter(c=>c.source===S.me);
   return head('','CV đã nộp','Theo dõi kết quả sàng lọc và trạng thái Open to Work của CV bạn đã nộp.')+cvTable(list,false);
 };
 function cvTable(list,actions){
-  return list.length?`<div class="tw"><table><thead><tr><th>Mã CV</th><th>Ứng viên</th><th>Vị trí</th><th>Sàng lọc</th><th>Open to Work</th><th class="r">Số lần bán</th><th></th></tr></thead><tbody>
+  return list.length?`<div class="tw"><table><thead><tr><th>Mã CV</th><th>Ứng viên</th><th>Vị trí</th><th>Sàng lọc</th><th>Open to Work</th><th class="r">Số lần mở</th><th></th></tr></thead><tbody>
   ${list.map(c=>`<tr><td class="mono">${c.code}</td><td>${esc(c.name)}</td><td>${POS[c.pos]}</td><td>${pill(c.status)}</td><td>${otwPill(c)}</td><td class="r num">${S.handovers.filter(h=>h.cv===c.id).length}</td><td class="r">${actions?`<button class="btn sm" data-act="hr-open" data-id="${c.id}">Chi tiết</button>`:''}</td></tr>`).join('')}
   </tbody></table></div>`:`<div class="panel empty">Chưa có CV.</div>`;
 }
@@ -370,7 +370,7 @@ VIEWS['ngt-link']=()=>{
   <p class="small muted">Mã giới thiệu: <span class="mono">${me.refCode}</span> · Tỷ lệ Referral hiện hành: ${S.cfg.ref}% giá trị đơn đầu tiên</p></div>
   <div class="tw"><table><thead><tr><th>Khách hàng</th><th>Ngày đăng ký</th><th>Đơn đầu tiên</th><th class="r">Hoa hồng Referral</th></tr></thead><tbody>
   ${custs.length?custs.map(k=>{const com=S.commissions.find(x=>x.role==='Referral'&&x.account===S.me&&acc(S.orders.find(o=>o.id===x.order).customer).id===k.id);const first=S.orders.filter(o=>o.customer===k.id&&o.status==='Đã thanh toán').slice(-1)[0];
-  return `<tr><td>${esc(k.name)}</td><td class="num">${dshow(k.created)}</td><td>${first?`<span class="mono">${first.id}</span> · ${dshow(first.paidAt)}`:'<span class="muted">Chưa mua</span>'}</td><td class="r num">${com?fmt(com.amount):'—'}</td></tr>`}).join(''):`<tr><td colspan="4" class="empty">Chưa có khách hàng đăng ký qua link.</td></tr>`}
+  return `<tr><td>${esc(k.name)}</td><td class="num">${dshow(k.created)}</td><td>${first?`<span class="mono">${first.id}</span> · ${dshow(first.paidAt)}`:'<span class="muted">Chưa mở CV</span>'}</td><td class="r num">${com?fmt(com.amount):'—'}</td></tr>`}).join(''):`<tr><td colspan="4" class="empty">Chưa có khách hàng đăng ký qua link.</td></tr>`}
   </tbody></table></div>`;
 };
 /* ---------- ADMIN ---------- */
@@ -391,9 +391,9 @@ VIEWS['ad-tai-khoan']=()=>{
   `<div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button role="tab" aria-selected="${t===k}" class="${t===k?'on':''}" data-act="tab" data-v="${k}">${l}</button>`).join('')}</div>${body}`;
 };
 VIEWS['ad-cau-hinh']=()=>{const c=S.cfg;
-  return head('UC13','Cấu hình giá bán và tỷ lệ commission','Thay đổi áp dụng cho đơn hàng tạo sau thời điểm lưu. Commission đã phát sinh giữ nguyên tỷ lệ cũ. Giá trị hiện tại là giá trị mẫu.')+
+  return head('UC13','Cấu hình phí mở CV và tỷ lệ commission','Thay đổi áp dụng cho đơn hàng tạo sau thời điểm lưu. Commission đã phát sinh giữ nguyên tỷ lệ cũ. Giá trị hiện tại là giá trị mẫu.')+
   `<form class="panel stack" data-form="cfg" style="max-width:720px"><div class="fgrid">
-  <div class="field"><label for="kPrice">Giá bán mỗi CV (đ)</label><input id="kPrice" type="number" min="1000" step="1000" value="${c.price}" required></div>
+  <div class="field"><label for="kPrice">Phí mở mỗi CV (đ)</label><input id="kPrice" type="number" min="1000" step="1000" value="${c.price}" required></div>
   <div class="field"><label for="kMin">Số CV tối thiểu mỗi đơn</label><input id="kMin" type="number" min="1" value="${c.minCV}" required></div><div></div>
   <div class="field"><label for="kSrc">Tỷ lệ Source (%)</label><input id="kSrc" type="number" min="0" max="100" step="0.5" value="${c.src}" required></div>
   <div class="field"><label for="kScr">Tỷ lệ Screener (%)</label><input id="kScr" type="number" min="0" max="100" step="0.5" value="${c.scr}" required></div>
@@ -423,15 +423,15 @@ VIEWS['ad-bao-cao']=()=>{
   const people=S.accounts.filter(a=>['hr','ctv','ngt'].includes(a.role)).map(a=>({a,src:S.cvs.filter(c=>c.source===a.id).length,sold:S.handovers.filter(h=>cvById(h.cv).source===a.id).length,com:S.commissions.filter(x=>x.account===a.id).reduce((s,x)=>s+x.amount,0)})).filter(p=>p.src||p.com).sort((x,y)=>y.com-x.com);
   return head('UC15','Báo cáo','Số liệu tổng hợp từ đơn hàng, thanh toán, CV và commission. Dữ liệu trong demo là dữ liệu mẫu.')+
   `<div class="kpis"><div class="kpi"><div class="k">Doanh thu</div><div class="v price">${fmt(rev)}</div><div class="s">${paid.length} đơn đã thanh toán</div></div>
-  <div class="kpi"><div class="k">CV đã bàn giao</div><div class="v">${S.handovers.length}</div><div class="s">lượt bán</div></div>
+  <div class="kpi"><div class="k">CV đã bàn giao</div><div class="v">${S.handovers.length}</div><div class="s">lượt mở CV</div></div>
   <div class="kpi"><div class="k">CV khả dụng</div><div class="v">${S.cvs.filter(available).length}</div><div class="s">trên ${S.cvs.length} CV trong hệ thống</div></div>
   <div class="kpi"><div class="k">Commission phát sinh</div><div class="v">${fmt(com)}</div><div class="s">${S.commissions.length} khoản</div></div></div>
   <div class="grid2"><div class="panel"><h2 style="margin-bottom:10px">Doanh thu theo tháng</h2>
   <div class="bars">${byM.map((v,i)=>`<div class="bar ${i===byM.length-1?'last':''}"><span>${(v/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})} tr</span><i style="height:${v/max*140}px"></i></div>`).join('')}</div>
   <div class="barlab">${months.map(m=>`<span>T${+m.slice(5)}/${m.slice(2,4)}</span>`).join('')}</div></div>
-  <div class="panel"><h2 style="margin-bottom:10px">Hiệu quả người giới thiệu</h2><div class="tw"><table><thead><tr><th>Người giới thiệu</th><th class="r">KH đăng ký</th><th class="r">KH đã mua</th><th class="r">Referral</th></tr></thead><tbody>
+  <div class="panel"><h2 style="margin-bottom:10px">Hiệu quả người giới thiệu</h2><div class="tw"><table><thead><tr><th>Người giới thiệu</th><th class="r">KH đăng ký</th><th class="r">KH đã mở CV</th><th class="r">Referral</th></tr></thead><tbody>
   ${S.accounts.filter(a=>a.role==='ngt').map(a=>{const ks=S.accounts.filter(k=>k.refBy===a.id);const bought=ks.filter(k=>S.orders.some(o=>o.customer===k.id&&o.status==='Đã thanh toán')).length;return `<tr><td>${esc(a.name)}</td><td class="r num">${ks.length}</td><td class="r num">${bought}</td><td class="r num">${fmt(S.commissions.filter(x=>x.account===a.id&&x.role==='Referral').reduce((s,x)=>s+x.amount,0))}</td></tr>`}).join('')}</tbody></table></div></div></div>
-  <div class="panel"><h2 style="margin-bottom:10px">Nguồn CV và commission theo người</h2><div class="tw"><table><thead><tr><th>Người</th><th>Vai trò</th><th class="r">CV tạo nguồn</th><th class="r">Lượt bán CV nguồn</th><th class="r">Commission</th></tr></thead><tbody>
+  <div class="panel"><h2 style="margin-bottom:10px">Nguồn CV và commission theo người</h2><div class="tw"><table><thead><tr><th>Người</th><th>Vai trò</th><th class="r">CV tạo nguồn</th><th class="r">Lượt mở CV nguồn</th><th class="r">Commission</th></tr></thead><tbody>
   ${people.map(p=>`<tr><td>${esc(p.a.name)}</td><td>${ROLE_NAME[p.a.role]}</td><td class="r num">${p.src}</td><td class="r num">${p.sold}</td><td class="r num">${fmt(p.com)}</td></tr>`).join('')}</tbody></table></div></div>`;
 };
 VIEWS['ad-cv']=()=>head('','Tất cả CV','Admin xem được thông tin đầy đủ của mọi CV trong hệ thống.')+
@@ -528,7 +528,7 @@ function authShell(inner){
   return `<div class="auth2"><section class="auth-brand">
     <div class="ab-logo"><img src="assets/mark.png" alt=""><span>Light Human</span></div>
     <h2>${isAdmin?'Quản trị <em>CV Marketplace</em>':'Nguồn ứng viên <em>đã sàng lọc</em>, sẵn sàng cho doanh nghiệp'}</h2>
-    <ul>${(isAdmin?['Duyệt và cấp tài khoản cho đối tác','Cấu hình giá bán, tỷ lệ commission','Theo dõi doanh thu và hiệu quả nguồn CV']
+    <ul>${(isAdmin?['Duyệt và cấp tài khoản cho đối tác','Cấu hình phí mở CV, tỷ lệ commission','Theo dõi doanh thu và hiệu quả nguồn CV']
       :['Hồ sơ được HR của Light Human đánh giá trước khi đăng','Xem trước thông tin, chỉ trả tiền cho CV phù hợp','Nhận đầy đủ thông tin ngay sau khi thanh toán']).map(x=>`<li>${ICON.ok}<span>${x}</span></li>`).join('')}</ul>
   </section><section class="auth-form">${inner}</section></div>`;
 }
@@ -560,7 +560,7 @@ VIEWS['dang-ky']=()=>authShell(_reg().replace(/^<div class="auth">/,'<div>').rep
 function cvCard(c,mine){
   const sel=S.cart.includes(c.id);
   return `<article class="cv2 ${sel?'sel':''}">
-    <div class="cv2-top"><span class="av lg">${c.pos}</span><div style="min-width:0"><h3>${POS[c.pos]}</h3><div class="small muted"><span class="mono">${c.code}</span> · ${c.area}</div></div>${mine?'<span class="pill p-ok">Đã mua</span>':''}</div>
+    <div class="cv2-top"><span class="av lg">${c.pos}</span><div style="min-width:0"><h3>${POS[c.pos]}</h3><div class="small muted"><span class="mono">${c.code}</span> · ${c.area}</div></div>${mine?'<span class="pill p-ok">Đã mở</span>':''}</div>
     <div class="chips"><span>${c.exp?c.exp+' năm kinh nghiệm':'Chưa có kinh nghiệm'}</span><span>${c.edu}</span><span>${c.gender}, ${2026-c.birth} tuổi</span></div>
     <p class="cv2-str">${esc(c.strengths)||'Chưa cập nhật điểm mạnh'}</p>
     <div class="cv2-meta"><span class="muted small">Ngành</span> ${esc(c.industry)} <span class="dot">·</span> <span class="muted small">Lương mong muốn</span> <b class="num">${c.salary} triệu</b></div>
@@ -584,7 +584,7 @@ VIEWS['kh-tim-kiem']=()=>{
     </form></section>
   <div class="resbar"><span><b>${list.length}</b> hồ sơ phù hợp</span>${(u.q||u.pos||u.area||u.exp||u.sal)?`<button class="link small" data-act="clear-filter">Xóa bộ lọc</button>`:''}</div>
   ${list.length?`<div class="cvgrid2">${list.map(c=>cvCard(c,mine.has(c.id))).join('')}</div>`:`<div class="empty2">${ICON.search}<h3>Chưa có hồ sơ phù hợp</h3><p class="muted">Thử bỏ bớt điều kiện lọc hoặc tìm với từ khóa khác.</p><button class="btn" data-act="clear-filter">Xóa bộ lọc</button></div>`}
-  ${n?`<div class="cartbar"><div><b>${n} CV</b> trong giỏ · <span class="num">${fmt(n*S.cfg.price)}</span>${need?`<div class="small">Thêm ${need} CV nữa để đặt mua (tối thiểu ${S.cfg.minCV} CV/đơn)</div>`:'<div class="small">Đủ điều kiện đặt mua</div>'}</div><button class="btn gold" data-go="kh-gio">Xem giỏ CV</button></div>`:''}`;
+  ${n?`<div class="cartbar"><div><b>${n} CV</b> trong giỏ · <span class="num">${fmt(n*S.cfg.price)}</span>${need?`<div class="small">Thêm ${need} CV nữa để mở (tối thiểu ${S.cfg.minCV} CV/đơn)</div>`:'<div class="small">Đủ điều kiện mở CV</div>'}</div><button class="btn gold" data-go="kh-gio">Xem giỏ CV</button></div>`:''}`;
 };
 
 /* ===================== UI v3: tìm kiếm & lọc cho mọi danh sách ===================== */
@@ -618,12 +618,12 @@ VIEWS['kh-don-hang']=()=>{
   (os.length?`<div class="tw"><table><thead><tr><th>Mã đơn</th><th>Ngày tạo</th><th>CV trong đơn</th><th class="r">Tổng tiền</th><th>Trạng thái</th><th></th></tr></thead><tbody>
   ${os.map(o=>{const fails=S.payments.filter(p=>p.order===o.id&&p.status==='Thất bại').length;return `<tr><td class="mono">${o.id}</td><td class="num">${dshow(o.created)}</td><td class="small mono">${o.items.map(i=>cvById(i.cv).code).join(', ')}</td><td class="r num">${fmt(o.total)}</td><td>${pill(o.status)}${fails?`<div class="small muted">${fails} lần thanh toán chưa thành công</div>`:''}</td>
   <td class="r">${o.status==='Chờ thanh toán'?`<button class="btn pri sm" data-act="pay" data-id="${o.id}">${fails?'Thanh toán lại':'Thanh toán'}</button>`:`<button class="link small" data-go="kh-cv">Xem CV</button>`}</td></tr>`}).join('')}</tbody></table></div>`:noRes())
-  :`<div class="empty2">${ICON.cart}<h3>Bạn chưa có đơn hàng nào</h3><p class="muted">Chọn CV phù hợp và đặt mua để bắt đầu.</p><button class="btn pri" data-go="kh-tim-kiem">Tìm CV ngay</button></div>`);
+  :`<div class="empty2">${ICON.cart}<h3>Bạn chưa có đơn hàng nào</h3><p class="muted">Chọn CV phù hợp và mở CV để bắt đầu.</p><button class="btn pri" data-go="kh-tim-kiem">Tìm CV ngay</button></div>`);
 };
 VIEWS['kh-cv']=()=>{
   const k='owned'; const all=S.handovers.filter(h=>h.customer===S.me);
   const hs=sortBy(k,all.filter(h=>{const c=cvById(h.cv);return hit(k,c.code,c.name,c.phone,c.email,POS[c.pos])&&eq(k,'pos',c.pos)&&eq(k,'area',c.area)&&eq(k,'order',h.order)}),h=>h.at);
-  return head('UC09','CV đã mua','Thông tin đầy đủ và file CV của các ứng viên bạn đã thanh toán.')+
+  return head('UC09','CV đã mở','Thông tin đầy đủ và file CV của các ứng viên bạn đã thanh toán.')+
   (all.length?toolbar(k,{q:'Tìm theo tên, SĐT, email hoặc mã CV',sel:[['pos','Tất cả vị trí',POS_O()],['area','Tất cả khu vực',AREAS],['order','Tất cả đơn hàng',[...new Set(all.map(h=>h.order))]]],sort:true,n:hs.length})+
   (hs.length?`<div class="tw"><table><thead><tr><th>Ứng viên</th><th>Vị trí</th><th>Liên hệ</th><th>Đơn hàng</th><th>Ngày nhận</th><th></th></tr></thead><tbody>
   ${hs.map(h=>{const c=cvById(h.cv);return `<tr><td><b>${esc(c.name)}</b><div class="small muted mono">${c.code}</div></td><td>${POS[c.pos]}<div class="small muted">${c.area}</div></td><td class="small">${c.phone}<br>${esc(c.email)}</td><td class="mono small">${h.order}</td><td class="num">${dshow(h.at)}</td><td class="r"><div class="row" style="justify-content:flex-end"><button class="btn sm" data-act="full" data-id="${c.id}">Xem CV</button><button class="btn sm ghost" data-act="dl" data-id="${c.id}">Tải file</button></div></td></tr>`}).join('')}
@@ -637,7 +637,7 @@ function cvList(k,base,{who=false,mine=false,actions='',q='Tìm theo mã CV, tê
   const sel=[['pos','Tất cả vị trí',POS_O()],['area','Tất cả khu vực',AREAS],['st','Tất cả kết quả sàng lọc',STATUS_O],['otw','Open to Work',OTW_O]];
   if(who) sel.push(['src','Tất cả người nộp',peopleOpts(['hr','ctv'])]);
   if(mine) sel.push(['mine','Vai trò của tôi',[['src','Tôi tạo nguồn'],['scr','Tôi sàng lọc']]]);
-  return toolbar(k,{q,sel,sort:true,n:list.length})+(list.length?`<div class="tw"><table><thead><tr><th>Ứng viên</th><th>Vị trí</th>${who?'<th>Người nộp</th>':''}<th>Ngày nộp</th><th>Sàng lọc</th><th>Open to Work</th><th class="r">Lượt bán</th><th></th></tr></thead><tbody>
+  return toolbar(k,{q,sel,sort:true,n:list.length})+(list.length?`<div class="tw"><table><thead><tr><th>Ứng viên</th><th>Vị trí</th>${who?'<th>Người nộp</th>':''}<th>Ngày nộp</th><th>Sàng lọc</th><th>Open to Work</th><th class="r">Lượt mở</th><th></th></tr></thead><tbody>
   ${list.map(c=>`<tr><td><b>${esc(c.name)}</b><div class="small muted mono">${c.code}</div></td><td>${POS[c.pos]}<div class="small muted">${c.area}</div></td>${who?`<td>${esc(acc(c.source)?.name||'—')}<div class="small muted">${ROLE_NAME[acc(c.source)?.role]||''}</div></td>`:''}<td class="num">${dshow(c.created)}</td><td>${pill(c.status)}</td><td>${otwPill(c)}</td><td class="r num">${S.handovers.filter(h=>h.cv===c.id).length}</td><td class="r">${actions.replace(/\{id\}/g,c.id)}</td></tr>`).join('')}
   </tbody></table></div>`:noRes());
 }
@@ -708,7 +708,7 @@ function commissionView(){
   (list.length?`<div class="tw"><table><thead><tr><th>Ngày</th><th>Đơn hàng</th><th>CV / Khách hàng</th><th>Vai trò</th><th class="r">Tỷ lệ</th><th class="r">Số tiền</th></tr></thead><tbody>
   ${list.map(x=>{const o=S.orders.find(o=>o.id===x.order);return `<tr><td class="num">${dshow(x.at)}</td><td class="mono">${x.order}</td><td>${x.cv?`<span class="mono">${cvById(x.cv).code}</span> <span class="small muted">· ${esc(acc(o.customer).name)}</span>`:esc(acc(o.customer).name)}</td><td>${pill(x.role)}</td><td class="r num">${x.rate}%</td><td class="r num">${fmt(x.amount)}</td></tr>`}).join('')}
   </tbody><tfoot><tr><td colspan="5"><b>Tổng theo bộ lọc</b></td><td class="r num"><b>${fmt(sum(list))}</b></td></tr></tfoot></table></div>`:noRes())
-  :`<div class="empty2">${ICON.info}<h3>Chưa có commission</h3><p class="muted">Commission sẽ xuất hiện khi CV bạn đóng góp được bán.</p></div>`);
+  :`<div class="empty2">${ICON.info}<h3>Chưa có commission</h3><p class="muted">Commission sẽ xuất hiện khi CV bạn đóng góp được mở.</p></div>`);
 }
 VIEWS['hr-commission']=commissionView;VIEWS['ctv-commission']=commissionView;VIEWS['ngt-commission']=commissionView;
 
@@ -720,9 +720,9 @@ VIEWS['ngt-link']=()=>{
   const rows=all.map(c=>{const first=S.orders.filter(o=>o.customer===c.id&&o.status==='Đã thanh toán').slice(-1)[0];const com=S.commissions.find(x=>x.role==='Referral'&&x.account===S.me&&S.orders.find(o=>o.id===x.order).customer===c.id);return {c,first,com}})
     .filter(r=>hit(k,r.c.name,r.c.email)&&(!F(k).buy||(F(k).buy==='y'?!!r.first:!r.first)));
   const list=sortBy(k,rows,r=>r.c.created);
-  return html.slice(0,i)+`<h2 style="margin-top:6px">Khách hàng đã giới thiệu</h2>`+toolbar(k,{q:'Tìm theo tên doanh nghiệp hoặc email',sel:[['buy','Tất cả khách hàng',[['y','Đã mua'],['n','Chưa mua']]]],sort:true,n:list.length})+
+  return html.slice(0,i)+`<h2 style="margin-top:6px">Khách hàng đã giới thiệu</h2>`+toolbar(k,{q:'Tìm theo tên doanh nghiệp hoặc email',sel:[['buy','Tất cả khách hàng',[['y','Đã mở CV'],['n','Chưa mở CV']]]],sort:true,n:list.length})+
   (list.length?`<div class="tw"><table><thead><tr><th>Khách hàng</th><th>Ngày đăng ký</th><th>Đơn đầu tiên</th><th class="r">Hoa hồng Referral</th></tr></thead><tbody>
-  ${list.map(({c,first,com})=>`<tr><td><b>${esc(c.name)}</b><div class="small muted">${esc(c.email)}</div></td><td class="num">${dshow(c.created)}</td><td>${first?`<span class="mono">${first.id}</span> · ${dshow(first.paidAt)}`:'<span class="pill p-neutral">Chưa mua</span>'}</td><td class="r num">${com?fmt(com.amount):'—'}</td></tr>`).join('')}</tbody></table></div>`
+  ${list.map(({c,first,com})=>`<tr><td><b>${esc(c.name)}</b><div class="small muted">${esc(c.email)}</div></td><td class="num">${dshow(c.created)}</td><td>${first?`<span class="mono">${first.id}</span> · ${dshow(first.paidAt)}`:'<span class="pill p-neutral">Chưa mở CV</span>'}</td><td class="r num">${com?fmt(com.amount):'—'}</td></tr>`).join('')}</tbody></table></div>`
   :all.length?noRes():`<div class="empty2">${ICON.info}<h3>Chưa có khách hàng</h3><p class="muted">Gửi link giới thiệu cho doanh nghiệp để bắt đầu.</p></div>`);
 };
 
@@ -802,7 +802,7 @@ function cvForm(uc,title,desc){
   <div class="row"><button class="btn pri">${S.role==='hr'?'Tạo CV':'Nộp CV'}</button><button type="button" class="btn ghost" data-act="cv-sample">Điền dữ liệu mẫu</button></div></form>`;
 }
 VIEWS['hr-tao-cv']=()=>cvForm('UC04','Tạo CV','CV mới chuyển sang trạng thái Chờ sàng lọc. Bạn được ghi nhận là người tạo nguồn (Source).');
-VIEWS['ctv-nop-cv']=()=>cvForm('UC04','Nộp CV','HR sẽ liên hệ ứng viên để sàng lọc. Bạn được ghi nhận là người tạo nguồn và nhận commission khi CV được bán.');
+VIEWS['ctv-nop-cv']=()=>cvForm('UC04','Nộp CV','HR sẽ liên hệ ứng viên để sàng lọc. Bạn được ghi nhận là người tạo nguồn và nhận commission khi CV được mở.');
 VIEWS['hr-sang-loc']=()=>{
   const tab=S.ui.slTab||'wait';
   const wait=S.cvs.filter(c=>c.status==='Chờ sàng lọc'), done=S.cvs.filter(c=>c.status!=='Chờ sàng lọc'&&c.screener===S.me);
@@ -873,11 +873,11 @@ function confirmBox(title,text,ok,act,id,danger){
 VIEWS['kh-gio']=()=>{
   const items=S.cart.map(cvById); const n=items.length, ok=n>=S.cfg.minCV, need=S.cfg.minCV-n;
   const hd=head('UC08','Giỏ CV',`Mỗi đơn hàng cần tối thiểu ${S.cfg.minCV} CV.`);
-  if(!n) return hd+`<div class="empty2">${ICON.cart}<h3>Giỏ CV đang trống</h3><p class="muted">Tìm và thêm những hồ sơ phù hợp để đặt mua.</p><button class="btn pri" data-go="kh-tim-kiem">Tìm CV</button></div>`;
+  if(!n) return hd+`<div class="empty2">${ICON.cart}<h3>Giỏ CV đang trống</h3><p class="muted">Tìm và thêm những hồ sơ phù hợp để mở.</p><button class="btn pri" data-go="kh-tim-kiem">Tìm CV</button></div>`;
   return hd+`<div class="cart2"><div class="stack">${items.map(c=>`<div class="ci"><span class="av lg">${c.pos}</span><div style="flex:1;min-width:0"><b>${POS[c.pos]}</b><div class="small muted"><span class="mono">${c.code}</span> · ${c.area} · ${c.exp} năm kinh nghiệm</div></div><span class="num">${fmt(S.cfg.price)}</span><button class="btn ghost sm" data-act="cart-del" data-id="${c.id}" aria-label="Bỏ ${c.code} khỏi giỏ">Bỏ</button></div>`).join('')}</div>
-  <aside class="panel sum"><h2>Tóm tắt đơn hàng</h2><div class="sr"><span>Số CV</span><b>${n}</b></div><div class="sr"><span>Đơn giá</span><span class="num">${fmt(S.cfg.price)}</span></div><div class="sr tot"><span>Tổng cộng</span><b class="num">${fmt(n*S.cfg.price)}</b></div>
-  ${ok?notice('ok','Đủ điều kiện đặt mua','Bạn sẽ thanh toán ở bước tiếp theo.'):notice('info',`Thêm ${need} CV nữa để đặt mua`,`Đơn hàng tối thiểu ${S.cfg.minCV} CV.`)}
-  <button class="btn pri big" data-act="create-order" ${ok?'':'disabled aria-disabled="true"'}>Đặt mua ${n} CV</button><button class="btn ghost" data-go="kh-tim-kiem">Chọn thêm CV</button></aside></div>`;
+  <aside class="panel sum"><h2>Tóm tắt đơn hàng</h2><div class="sr"><span>Số CV</span><b>${n}</b></div><div class="sr"><span>Phí mở / CV</span><span class="num">${fmt(S.cfg.price)}</span></div><div class="sr tot"><span>Tổng cộng</span><b class="num">${fmt(n*S.cfg.price)}</b></div>
+  ${ok?notice('ok','Đủ điều kiện mở CV','Bạn sẽ thanh toán ở bước tiếp theo.'):notice('info',`Thêm ${need} CV nữa để mở`,`Đơn hàng tối thiểu ${S.cfg.minCV} CV.`)}
+  <button class="btn pri big" data-act="create-order" ${ok?'':'disabled aria-disabled="true"'}>Mở ${n} CV</button><button class="btn ghost" data-go="kh-tim-kiem">Chọn thêm CV</button></aside></div>`;
 };
 
 /* ===================== EVENTS ===================== */
@@ -903,9 +903,9 @@ document.addEventListener('click',e=>{
     'ref-try':()=>{if(S.role!=='guest'){window.open('index.html?ref='+encodeURIComponent(v)+'#dang-ky','_blank','noopener');return}S.ui.regRef=v;S.ui.regType='kh';go('dang-ky')},
     preview:()=>drawer(previewHTML(cvById(id))),
     full:()=>drawer(fullHTML(cvById(id))),
-    'cart-add':()=>{if(owned(S.me).has(id)){toast('Bạn đã sở hữu CV này',true);return}S.cart.push(id);render();toast(`Đã chọn ${cvById(id).code} · ${S.cart.length}/${S.cfg.minCV} CV`)},
+    'cart-add':()=>{if(owned(S.me).has(id)){toast('Bạn đã mở CV này',true);return}S.cart.push(id);render();toast(`Đã chọn ${cvById(id).code} · ${S.cart.length}/${S.cfg.minCV} CV`)},
     'cart-del':()=>{S.cart=S.cart.filter(x=>x!==id);render()},
-    'create-order':()=>{const mine=owned(S.me);if(S.cart.some(x=>mine.has(x))){toast('Đơn có CV đã sở hữu, vui lòng bỏ ra',true);return}
+    'create-order':()=>{const mine=owned(S.me);if(S.cart.some(x=>mine.has(x))){toast('Đơn có CV đã mở, vui lòng bỏ ra',true);return}
       if(S.cart.length<S.cfg.minCV){toast(`Cần tối thiểu ${S.cfg.minCV} CV`,true);return}
       const o=createOrder(S.me,[...S.cart]);S.cart=[];toast(`Đã tạo đơn ${o.id} · ${fmt(o.total)}`);go('kh-don-hang')},
     pay:()=>{S.ui.payOrder=id;S.ui.payResult=null;go('kh-thanh-toan')},
@@ -1006,10 +1006,10 @@ document.addEventListener('submit',e=>{
     S.accounts.push(a);notify(a.name,'Email','Thông tin đăng nhập và mật khẩu tạm đã được gửi');S.ui.tab='all';render();toast(`Đã tạo tài khoản ${ROLE_NAME[role]} và gửi email cho ${a.name}`);return}
   if(kind==='cfg'){
     const p=+val('kPrice'),m=+val('kMin'),s1=+val('kSrc'),s2=+val('kScr'),s3=+val('kRef');
-    if(p<=0||m<1)return err('kErr','Giá bán và số CV tối thiểu phải lớn hơn 0.');
+    if(p<=0||m<1)return err('kErr','Phí mở CV và số CV tối thiểu phải lớn hơn 0.');
     if(s1+s2>100||[s1,s2,s3].some(x=>x<0||x>100))return err('kErr','Tỷ lệ phải nằm trong khoảng 0–100% và tổng Source + Screener không vượt 100%.');
     Object.assign(S.cfg,{price:p,minCV:m,src:s1,scr:s2,ref:s3,updatedBy:acc(S.me).name,at:nowISO()});
-    S.cfgLog.unshift({at:nowISO(),by:acc(S.me).name,text:`Giá ${fmt(p)}/CV · tối thiểu ${m} CV · Source ${s1}% · Screener ${s2}% · Referral ${s3}%`});render();toast('Đã lưu cấu hình. Áp dụng cho đơn hàng mới.');return}
+    S.cfgLog.unshift({at:nowISO(),by:acc(S.me).name,text:`Phí mở ${fmt(p)}/CV · tối thiểu ${m} CV · Source ${s1}% · Screener ${s2}% · Referral ${s3}%`});render();toast('Đã lưu cấu hình. Áp dụng cho đơn hàng mới.');return}
   if(kind==='adjust'){
     const c=cvById(val('aCv')),reason=val('aReason'),ns=val('aSrc'),nc=val('aScr')||null;
     if(!reason)return err('aErr','Nhập lý do điều chỉnh.');

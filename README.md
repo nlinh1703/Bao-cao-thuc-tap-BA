@@ -13,7 +13,7 @@
 
 ## Giới thiệu
 
-CV Marketplace là hệ thống giúp Light Human khai thác thương mại nguồn CV ứng viên sẵn có: HR và cộng tác viên đưa CV vào hệ thống, HR sàng lọc, khách hàng tự tìm kiếm và mua CV, commission được chia tự động cho các vai trò Source, Screener và Referral, ứng viên tự bật/tắt Open to Work qua link cá nhân.
+CV Marketplace là hệ thống giúp Light Human khai thác nguồn CV ứng viên sẵn có: HR và cộng tác viên đưa CV vào hệ thống, HR sàng lọc, khách hàng tự tìm kiếm và mở CV, commission được chia tự động cho các vai trò Source, Screener và Referral, ứng viên tự bật/tắt Open to Work qua link cá nhân.
 
 Đề tài là đồ án thực tập theo doanh nghiệp, tập trung vào **phân tích nghiệp vụ và thiết kế hệ thống**: business rules, BPMN TO-BE, yêu cầu chức năng và phi chức năng, use case kèm acceptance criteria, sơ đồ hoạt động, sơ đồ tuần tự, ERD, từ điển dữ liệu, phân quyền, kiến trúc tổng quan và thiết kế giao diện. Lập trình back-end và triển khai phiên bản web chính thức nằm ngoài phạm vi; bản demo trong thư mục `Code/` là prototype giao diện chạy trên dữ liệu giả lập.
 

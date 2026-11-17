@@ -38,7 +38,7 @@
 \maketitle
 
 \begin{abstract}
-\noindent Light Human là doanh nghiệp tư vấn nhân sự đã tích lũy một nguồn CV ứng viên lớn qua các campaign tuyển dụng, nhưng phần lớn CV không còn được khai thác sau khi campaign kết thúc. Bài báo trình bày quá trình phân tích nghiệp vụ và thiết kế hệ thống CV Marketplace – nền tảng giúp doanh nghiệp khai thác thương mại nguồn CV này: HR và cộng tác viên đưa CV vào hệ thống, HR sàng lọc chất lượng, khách hàng tự tìm kiếm và mua CV, commission được chia tự động cho từng vai trò đóng góp, còn ứng viên chủ động bật hoặc tắt trạng thái Open to Work qua link cá nhân. Đề tài áp dụng hướng dẫn BABOK, ký pháp BPMN 2.0 và UML để xác định 15 business rules, 20 yêu cầu chức năng, 15 use case kèm 53 acceptance criteria, ERD 13 thực thể, kiến trúc tổng quan ba tầng và một bản demo giao diện web tương tác. Kết quả là bộ tài liệu thống nhất, truy vết được từ yêu cầu đến thiết kế, làm đầu vào trực tiếp cho giai đoạn phát triển phiên bản web.
+\noindent Light Human là doanh nghiệp tư vấn nhân sự đã tích lũy một nguồn CV ứng viên lớn qua các campaign tuyển dụng, nhưng phần lớn CV không còn được khai thác sau khi campaign kết thúc. Bài báo trình bày quá trình phân tích nghiệp vụ và thiết kế hệ thống CV Marketplace – nền tảng giúp doanh nghiệp khai thác nguồn CV này: HR và cộng tác viên đưa CV vào hệ thống, HR sàng lọc chất lượng, khách hàng tự tìm kiếm và mở CV, commission được chia tự động cho từng vai trò đóng góp, còn ứng viên chủ động bật hoặc tắt trạng thái Open to Work qua link cá nhân. Đề tài áp dụng hướng dẫn BABOK, ký pháp BPMN 2.0 và UML để xác định 15 business rules, 20 yêu cầu chức năng, 15 use case kèm 53 acceptance criteria, ERD 13 thực thể, kiến trúc tổng quan ba tầng và một bản demo giao diện web tương tác. Kết quả là bộ tài liệu thống nhất, truy vết được từ yêu cầu đến thiết kế, làm đầu vào trực tiếp cho giai đoạn phát triển phiên bản web.
 
 \medskip\noindent\textbf{Từ khóa:} phân tích nghiệp vụ, BPMN, UML, use case, acceptance criteria, CV Marketplace.
 \end{abstract}
@@ -46,7 +46,7 @@
 \section{Giới thiệu}
 Công ty Cổ phần Giải pháp Nhân sự Ánh Sáng (Light Human) có hơn 6 năm hoạt động trong lĩnh vực tư vấn nhân sự, đã thực hiện hơn 1.200 dự án và kết nối việc làm cho hơn 36.000 ứng viên. Trong các campaign tuyển dụng, công ty tích lũy nhiều CV ở các vị trí như Chăm sóc khách hàng, Telesales, Sales B2C; tuy nhiên sau khi campaign kết thúc, phần lớn CV không còn được sử dụng dù nhiều ứng viên vẫn có nhu cầu tìm việc.
 
-Dự án CV Marketplace hướng đến ba vấn đề: (i) nguồn CV phân tán, chưa có kênh khai thác thương mại; (ii) giá trị của một CV do nhiều người tạo ra – người đưa CV vào, người sàng lọc và người mang khách hàng về – nhưng chưa có cơ chế ghi nhận và chia commission minh bạch; (iii) ứng viên chưa có cách chủ động cho biết mình còn muốn được giới thiệu hay không, trong khi Nghị định 13/2023/NĐ-CP yêu cầu bảo vệ dữ liệu cá nhân \cite{nd13}. Dự án được triển khai theo hai giai đoạn: giai đoạn chạy thử vận hành bằng Google Form, Google Sheet và Apps Script \cite{lh_admin,lh_kh}; giai đoạn tiếp theo là phiên bản web – đối tượng phân tích và thiết kế của đề tài.
+Dự án CV Marketplace hướng đến ba vấn đề: (i) nguồn CV phân tán, chưa có kênh khai thác; (ii) giá trị của một CV do nhiều người tạo ra – người đưa CV vào, người sàng lọc và người mang khách hàng về – nhưng chưa có cơ chế ghi nhận và chia commission minh bạch; (iii) ứng viên chưa có cách chủ động cho biết mình còn muốn được giới thiệu hay không, trong khi Nghị định 13/2023/NĐ-CP yêu cầu bảo vệ dữ liệu cá nhân \cite{nd13}. Dự án được triển khai theo hai giai đoạn: giai đoạn chạy thử vận hành bằng Google Form, Google Sheet và Apps Script \cite{lh_admin,lh_kh}; giai đoạn tiếp theo là phiên bản web – đối tượng phân tích và thiết kế của đề tài.
 
 Mục tiêu của đề tài là xây dựng bộ tài liệu phân tích nghiệp vụ, phân tích yêu cầu và thiết kế hệ thống cho phiên bản web. Phạm vi gồm: phân tích các bên liên quan, business rules, quy trình TO-BE, yêu cầu chức năng và phi chức năng, mô hình UML, thiết kế dữ liệu, phân quyền, kiến trúc tổng quan và thiết kế giao diện kèm bản demo. Đề tài không bao gồm lập trình back-end, chi trả commission ra ngân hàng, hoàn tiền và ứng dụng di động.
 
@@ -65,12 +65,12 @@ Hệ thống có sáu nhóm người dùng và hai hệ thống bên ngoài (B�
 \begin{tabularx}{\linewidth}{@{}p{3.3cm}L@{}}
 \toprule
 \textbf{Bên liên quan} & \textbf{Vai trò trong nghiệp vụ}\\\midrule
-Khách hàng & Doanh nghiệp tuyển dụng; tìm kiếm, xem preview, mua và tải CV.\\
+Khách hàng & Doanh nghiệp tuyển dụng; tìm kiếm, xem preview, mở và tải CV.\\
 HR & Tạo CV từ nguồn tự khai thác, sàng lọc CV, cập nhật Open to Work thay ứng viên; nhận commission Source/Screener.\\
-CTV & Cộng tác viên bên ngoài nộp CV; nhận commission Source khi CV được bán.\\
+CTV & Cộng tác viên bên ngoài nộp CV; nhận commission Source khi CV được mở.\\
 Người giới thiệu & BD nội bộ hoặc đối tác mang khách hàng mới về qua link riêng; nhận hoa hồng Referral.\\
 Ứng viên & Chủ thể dữ liệu, không có tài khoản; bật/tắt Open to Work qua link cá nhân, nhận thông báo bàn giao.\\
-Admin & Duyệt và cấp tài khoản, cấu hình giá và tỷ lệ commission, điều chỉnh Source/Screener, xem báo cáo.\\
+Admin & Duyệt và cấp tài khoản, cấu hình phí mở CV và tỷ lệ commission, điều chỉnh Source/Screener, xem báo cáo.\\
 Cổng thanh toán, Zalo OA/Email & Hệ thống bên ngoài: xử lý thanh toán; gửi link cá nhân và thông báo cho ứng viên.\\\bottomrule
 \end{tabularx}
 \end{table}
@@ -80,15 +80,15 @@ Cổng thanh toán, Zalo OA/Email & Hệ thống bên ngoài: xử lý thanh to�
 \begin{itemize}
 \item \textbf{BR-01, BR-04:} mọi CV phải được HR sàng lọc đạt; CV chỉ xuất hiện trong kết quả tìm kiếm khi đồng thời đã đạt sàng lọc và ứng viên đang bật Open to Work.
 \item \textbf{BR-02, BR-03:} mỗi CV ghi nhận riêng người tạo nguồn (Source) và người sàng lọc (Screener); chỉ Admin được điều chỉnh sau khi đã gán.
-\item \textbf{BR-07:} trước khi mua, khách hàng chỉ xem các trường công khai; thông tin liên hệ bị ẩn.
-\item \textbf{BR-08, BR-09:} giá chung 100.000 đồng/CV, mỗi đơn tối thiểu 5 CV; một CV bán được cho nhiều khách hàng nhưng một khách hàng không mua lại CV đã sở hữu.
+\item \textbf{BR-07:} trước khi mở CV, khách hàng chỉ xem các trường công khai; thông tin liên hệ bị ẩn.
+\item \textbf{BR-08, BR-09:} phí mở CV chung 100.000 đồng/CV, mỗi đơn tối thiểu 5 CV; một CV được giới thiệu cho nhiều khách hàng nhưng một khách hàng không cần mở lại CV đã mở.
 \item \textbf{BR-10, BR-11:} doanh thu chỉ được ghi nhận và CV chỉ được mở khóa khi cổng thanh toán xác nhận thành công; commission được chia tự động ngay lúc đó.
 \item \textbf{BR-12:} khách hàng đăng ký qua link giới thiệu được gắn Người giới thiệu một lần, vĩnh viễn; hoa hồng Referral phát sinh tại đơn thanh toán thành công đầu tiên.
 \item \textbf{BR-14:} tuân thủ Nghị định 13/2023/NĐ-CP: ghi nhận sự đồng ý, cho phép tắt Open to Work bất cứ lúc nào, thông báo mỗi lần bàn giao CV.
 \end{itemize}
 
 \subsection{Quy trình nghiệp vụ TO-BE}
-Quy trình gồm ba luồng nối tiếp theo vòng đời của một CV (Hình~\ref{fig:bpmn}). \emph{Luồng A – tạo nguồn và sàng lọc:} HR tạo hoặc CTV nộp CV; HR liên hệ ứng viên, bổ sung thông tin và sàng lọc; nếu đạt, hệ thống gửi link cá nhân để ứng viên bật Open to Work (hoặc HR cập nhật thay), sau đó CV vào nguồn khả dụng. \emph{Luồng B – mua CV:} khách hàng tìm kiếm, tạo đơn tối thiểu 5 CV và thanh toán qua cổng thanh toán. \emph{Luồng C – chia commission:} khi thanh toán thành công, hệ thống song song tạo commission Source, Screener, gửi thông báo bàn giao và xét điều kiện hoa hồng Referral. Sơ đồ sử dụng pool riêng cho Khách hàng và pool thu gọn cho Ứng viên, Người giới thiệu, Cổng thanh toán; trao đổi giữa các pool dùng luồng thông điệp.
+Quy trình gồm ba luồng nối tiếp theo vòng đời của một CV (Hình~\ref{fig:bpmn}). \emph{Luồng A – tạo nguồn và sàng lọc:} HR tạo hoặc CTV nộp CV; HR liên hệ ứng viên, bổ sung thông tin và sàng lọc; nếu đạt, hệ thống gửi link cá nhân để ứng viên bật Open to Work (hoặc HR cập nhật thay), sau đó CV vào nguồn khả dụng. \emph{Luồng B – mở CV:} khách hàng tìm kiếm, tạo đơn tối thiểu 5 CV và thanh toán qua cổng thanh toán. \emph{Luồng C – chia commission:} khi thanh toán thành công, hệ thống song song tạo commission Source, Screener, gửi thông báo bàn giao và xét điều kiện hoa hồng Referral. Sơ đồ sử dụng pool riêng cho Khách hàng và pool thu gọn cho Ứng viên, Người giới thiệu, Cổng thanh toán; trao đổi giữa các pool dùng luồng thông điệp.
 
 \begin{figure}[!htbp]
 \centering
@@ -114,10 +114,10 @@ Quy trình gồm ba luồng nối tiếp theo vòng đời của một CV (Hình
 \textbf{Nhóm} & \textbf{Use case}\\\midrule
 Quản lý tài khoản & UC01 Đăng ký tài khoản; UC02 Đăng nhập; UC03 Quản lý tài khoản nội bộ\\
 Quản lý nguồn CV & UC04 Tạo/Nộp CV; UC05 Sàng lọc CV; UC06 Cập nhật Open to Work\\
-Tìm kiếm và mua CV & UC07 Tìm kiếm và xem preview CV; UC08 Tạo đơn hàng; UC09 Xem và tải CV đã sở hữu\\
+Tìm kiếm và mở CV & UC07 Tìm kiếm và xem preview CV; UC08 Tạo đơn hàng; UC09 Xem và tải CV đã mở\\
 Thanh toán và bàn giao & UC10 Thanh toán đơn hàng\\
 Commission và giới thiệu & UC11 Xem commission cá nhân; UC12 Lấy link giới thiệu và xem khách hàng đã giới thiệu\\
-Quản trị hệ thống & UC13 Cấu hình giá bán và tỷ lệ commission; UC14 Điều chỉnh Source/Screener; UC15 Xem báo cáo\\\bottomrule
+Quản trị hệ thống & UC13 Cấu hình phí mở CV và tỷ lệ commission; UC14 Điều chỉnh Source/Screener; UC15 Xem báo cáo\\\bottomrule
 \end{tabularx}
 \end{table}
 
@@ -126,11 +126,11 @@ Mỗi use case có từ 3 đến 4 tiêu chí chấp nhận viết theo cấu tr
 \begin{itemize}
 \item \textbf{AC08.1:} Cho giỏ có ít hơn số CV tối thiểu theo cấu hình, khi tạo đơn hàng, thì hệ thống không cho tạo và báo số CV còn thiếu.
 \item \textbf{AC10.3:} Cho hệ thống nhận trùng kết quả của cùng một giao dịch, khi xử lý, thì giao dịch chỉ được xử lý một lần, không tạo trùng bàn giao hay commission.
-\item \textbf{AC09.2:} Cho CV khách hàng chưa sở hữu, khi truy cập trực tiếp vào trang chi tiết, thì hệ thống từ chối và không hiển thị thông tin liên hệ.
+\item \textbf{AC09.2:} Cho CV khách hàng chưa mở, khi truy cập trực tiếp vào trang chi tiết, thì hệ thống từ chối và không hiển thị thông tin liên hệ.
 \end{itemize}
 
 \subsection{Thiết kế dữ liệu và phân quyền}
-ERD gồm 13 thực thể (Hình~\ref{fig:erd}). Thiết kế tách bảng Attribution để mỗi CV có hai bản ghi Source và Screener; tách CVTransaction để một CV xuất hiện trong đơn hàng của nhiều khách hàng; Commission gắn với từng dòng giao dịch (Source, Screener) hoặc với đơn hàng đầu tiên của khách hàng (Referral). Từ điển dữ liệu mô tả kiểu, khóa và ràng buộc của từng thuộc tính. Các quy tắc toàn vẹn chính gồm: số điện thoại ứng viên là duy nhất để chống trùng; ràng buộc duy nhất (CVID, Role) trên Attribution; (CustomerID, CVID) trên lịch sử bàn giao để khách hàng không mua lại CV; mã giao dịch của cổng thanh toán là duy nhất để mỗi giao dịch chỉ được xử lý một lần; đơn hàng và commission lưu giá, tỷ lệ tại thời điểm tạo. Ma trận phân quyền xác định chức năng cho năm nhóm có tài khoản; ứng viên chỉ thao tác qua link chứa mã định danh riêng.
+ERD gồm 13 thực thể (Hình~\ref{fig:erd}). Thiết kế tách bảng Attribution để mỗi CV có hai bản ghi Source và Screener; tách CVTransaction để một CV xuất hiện trong đơn hàng của nhiều khách hàng; Commission gắn với từng dòng giao dịch (Source, Screener) hoặc với đơn hàng đầu tiên của khách hàng (Referral). Từ điển dữ liệu mô tả kiểu, khóa và ràng buộc của từng thuộc tính. Các quy tắc toàn vẹn chính gồm: số điện thoại ứng viên là duy nhất để chống trùng; ràng buộc duy nhất (CVID, Role) trên Attribution; (CustomerID, CVID) trên lịch sử bàn giao để khách hàng không cần mở lại CV; mã giao dịch của cổng thanh toán là duy nhất để mỗi giao dịch chỉ được xử lý một lần; đơn hàng và commission lưu phí mở CV, tỷ lệ tại thời điểm tạo. Ma trận phân quyền xác định chức năng cho năm nhóm có tài khoản; ứng viên chỉ thao tác qua link chứa mã định danh riêng.
 
 \begin{figure}[!htbp]
 \centering
@@ -163,7 +163,7 @@ Giao diện được xây dựng thành bản demo web tương tác gồm 18 mà
 Đề tài còn các hạn chế: phiên bản web chính thức chưa được lập trình nên thiết kế chưa được kiểm chứng bằng vận hành thực tế; bản demo chỉ chạy trên dữ liệu giả lập lưu tại trình duyệt, cổng thanh toán được mô phỏng; chưa thiết kế chi trả commission, hoàn tiền, xử lý khiếu nại; thiết kế dữ liệu dừng ở mức logic.
 
 \section{Kết luận và hướng phát triển}
-Đề tài đã phân tích và thiết kế hệ thống CV Marketplace, giúp Light Human khai thác thương mại nguồn CV ứng viên sẵn có. Điểm nổi bật là cơ chế ghi nhận đóng góp theo từng vai trò Source, Screener, Referral để chia commission tự động, và cơ chế Open to Work qua link cá nhân giúp ứng viên chủ động với dữ liệu của mình. Hướng phát triển tiếp theo gồm: kiểm thử bản demo với người dùng thực tế; thiết kế cơ sở dữ liệu mức vật lý và đặc tả API; lập kế hoạch chuyển dữ liệu từ giai đoạn chạy thử; xây dựng kịch bản kiểm thử chấp nhận; bổ sung bảng giá theo loại nguồn CV, chi trả commission tự động và gợi ý CV phù hợp cho khách hàng.
+Đề tài đã phân tích và thiết kế hệ thống CV Marketplace, giúp Light Human khai thác nguồn CV ứng viên sẵn có. Điểm nổi bật là cơ chế ghi nhận đóng góp theo từng vai trò Source, Screener, Referral để chia commission tự động, và cơ chế Open to Work qua link cá nhân giúp ứng viên chủ động với dữ liệu của mình. Hướng phát triển tiếp theo gồm: kiểm thử bản demo với người dùng thực tế; thiết kế cơ sở dữ liệu mức vật lý và đặc tả API; lập kế hoạch chuyển dữ liệu từ giai đoạn chạy thử; xây dựng kịch bản kiểm thử chấp nhận; bổ sung bảng phí theo loại nguồn CV, chi trả commission tự động và gợi ý CV phù hợp cho khách hàng.
 
 \begin{thebibliography}{10}\small
 \bibitem{nd13} Chính phủ (2023), \emph{Nghị định số 13/2023/NĐ-CP ngày 17/04/2023 về bảo vệ dữ liệu cá nhân}.

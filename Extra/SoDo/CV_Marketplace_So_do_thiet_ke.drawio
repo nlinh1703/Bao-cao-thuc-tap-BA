@@ -1,6 +1,5 @@
 <mxfile host="app.diagrams.net" pages="40">
-  <diagram name="UC 4.1 Tổng quan" id="UC41Tổngquan6432">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+  <diagram name="UC 4.1 Tổng quan" id="UC41Tổngquan6432"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -13,7 +12,7 @@
         <mxCell id="c6" parent="c2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Thanh toán &amp; bàn giao" vertex="1">
           <mxGeometry height="56" width="200" x="50" y="320" as="geometry" />
         </mxCell>
-        <mxCell id="c5" parent="c2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Tìm kiếm &amp; mua CV" vertex="1">
+        <mxCell id="c5" parent="c2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Tìm kiếm &amp; mở CV" vertex="1">
           <mxGeometry height="56" width="200" x="50" y="205" as="geometry" />
         </mxCell>
         <mxCell id="c3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Quản trị hệ thống" vertex="1">
@@ -98,10 +97,8 @@
           </mxGeometry>
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="UC 4.2 Tài khoản" id="UC42Tàikhoản7744">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="UC 4.2 Tài khoản" id="UC42Tàikhoản7744"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -166,10 +163,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="UC 4.3 Nguồn CV" id="UC43NguồnCV4080">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="UC 4.3 Nguồn CV" id="UC43NguồnCV4080"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -216,14 +211,12 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="UC 4.4 Tìm kiếm &amp; mua" id="UC44Tìmkiếmmua9584">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="UC 4.4 Tìm kiếm &amp; mở CV" id="UC44Tìmkiếmmua9584"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="c2" parent="1" style="swimlane;startSize=30;html=1;fillColor=none;fontStyle=1;" value="Tìm kiếm &amp; mua CV" vertex="1">
+        <mxCell id="c2" parent="1" style="swimlane;startSize=30;html=1;fillColor=none;fontStyle=1;" value="Tìm kiếm &amp; mở CV" vertex="1">
           <mxGeometry height="370" width="260" x="260" y="40" as="geometry" />
         </mxCell>
         <mxCell id="c3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Tìm kiếm và xem preview CV" vertex="1">
@@ -232,7 +225,7 @@
         <mxCell id="c4" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Tạo đơn hàng" vertex="1">
           <mxGeometry height="56" width="220" x="280" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="c5" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Xem và tải CV đã sở hữu" vertex="1">
+        <mxCell id="c5" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Xem và tải CV đã mở" vertex="1">
           <mxGeometry height="56" width="220" x="280" y="310" as="geometry" />
         </mxCell>
         <mxCell id="c6" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Khách hàng" vertex="1">
@@ -248,10 +241,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="UC 4.5 Thanh toán" id="UC45Thanhtoán6096">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="UC 4.5 Thanh toán" id="UC45Thanhtoán6096"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -280,10 +271,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="UC 4.6 Commission" id="UC46Commission4176">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="UC 4.6 Commission" id="UC46Commission4176"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -318,17 +307,15 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="UC 4.7 Quản trị" id="UC47Quảntrị5728">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="UC 4.7 Quản trị" id="UC47Quảntrị5728"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="c2" parent="1" style="swimlane;startSize=30;html=1;fillColor=none;fontStyle=1;" value="Quản trị hệ thống" vertex="1">
           <mxGeometry height="370" width="260" x="260" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="c3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Cấu hình giá bán và tỷ lệ commission" vertex="1">
+        <mxCell id="c3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Cấu hình phí mở CV và tỷ lệ commission" vertex="1">
           <mxGeometry height="56" width="220" x="280" y="90" as="geometry" />
         </mxCell>
         <mxCell id="c4" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Điều chỉnh Source/Screener" vertex="1">
@@ -350,10 +337,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="AD 4.8 Đăng ký tài khoản" id="d1a11f7e8ab">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="AD 4.8 Đăng ký tài khoản" id="d1a11f7e8ab"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -521,10 +506,8 @@
           </mxGeometry>
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="AD 4.9 Đăng nhập" id="dc6cf007ca3">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="AD 4.9 Đăng nhập" id="dc6cf007ca3"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -656,10 +639,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="AD 4.10 Quản lý TK nội bộ" id="dd00f277897">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="AD 4.10 Quản lý TK nội bộ" id="dd00f277897"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -869,10 +850,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="5u7DE6zxBiIf8PJt_GZV" name="AD 4.11 Tạo / Nộp CV">
-    <mxGraphModel dx="1269" dy="1105" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="5u7DE6zxBiIf8PJt_GZV" name="AD 4.11 Tạo / Nộp CV"><mxGraphModel dx="1269" dy="1105" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -977,10 +956,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="TVEQHdbSdBnkYLgZmRFy" name="AD 4.12 Sàng lọc CV">
-    <mxGraphModel dx="1413" dy="1230" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="TVEQHdbSdBnkYLgZmRFy" name="AD 4.12 Sàng lọc CV"><mxGraphModel dx="1413" dy="1230" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1155,10 +1132,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="em33ZeA357-7p4uULmrr" name="AD 4.13 Cập nhật Open to Work">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="em33ZeA357-7p4uULmrr" name="AD 4.13 Cập nhật Open to Work"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1298,10 +1273,8 @@
           </mxGeometry>
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="mvaw_1Mj9YDEz7DvX2M_" name="AD 4.14 Tìm kiếm và xem preview CV">
-    <mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="mvaw_1Mj9YDEz7DvX2M_" name="AD 4.14 Tìm kiếm và xem preview CV"><mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1332,7 +1305,7 @@
         <mxCell id="c10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Thông báo không có kết quả, gợi ý nới bộ lọc" vertex="1">
           <mxGeometry height="56" width="170" x="385" y="342" as="geometry" />
         </mxCell>
-        <mxCell id="c11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Hiển thị danh sách field công khai, đánh dấu CV đã sở hữu" vertex="1">
+        <mxCell id="c11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Hiển thị danh sách field công khai, đánh dấu CV đã mở" vertex="1">
           <mxGeometry height="56" width="200" x="660" y="447" as="geometry" />
         </mxCell>
         <mxCell id="c12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Chọn CV để xem preview" vertex="1">
@@ -1385,10 +1358,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="964V1_wPHUha43ZmP04n" name="AD 4.15 Tạo đơn hàng">
-    <mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="964V1_wPHUha43ZmP04n" name="AD 4.15 Tạo đơn hàng"><mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1410,7 +1381,7 @@
         <mxCell id="c7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Xác nhận tạo đơn hàng" vertex="1">
           <mxGeometry height="50" width="150" x="135" y="245" as="geometry" />
         </mxCell>
-        <mxCell id="c8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Kiểm tra từng CV còn khả dụng và chưa sở hữu" vertex="1">
+        <mxCell id="c8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Kiểm tra từng CV còn khả dụng và chưa mở" vertex="1">
           <mxGeometry height="56" width="190" x="665" y="242" as="geometry" />
         </mxCell>
         <mxCell id="c9" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="Có CV không hợp lệ?" vertex="1">
@@ -1428,7 +1399,7 @@
         <mxCell id="c13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Thông báo chưa đủ, yêu cầu chọn thêm CV" vertex="1">
           <mxGeometry height="56" width="160" x="390" y="522" as="geometry" />
         </mxCell>
-        <mxCell id="c14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Tính tổng tiền theo giá bán hiện hành" vertex="1">
+        <mxCell id="c14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Tính tổng tiền theo phí mở CV hiện hành" vertex="1">
           <mxGeometry height="50" width="180" x="670" y="625" as="geometry" />
         </mxCell>
         <mxCell id="c15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Tạo Order và CVTransaction &quot;Chờ thanh toán&quot;" vertex="1">
@@ -1492,14 +1463,12 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="ySZDM6_6m-eLrIyvTdUf" name="AD 4.16 Xem và tải CV đã sở hữu">
-    <mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="ySZDM6_6m-eLrIyvTdUf" name="AD 4.16 Xem và tải CV đã mở"><mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="c2" parent="1" style="swimlane;html=1;startSize=30;fontStyle=1;fontSize=14;fillColor=none;" value="Biểu đồ hoạt động – Xem và tải CV đã sở hữu" vertex="1">
+        <mxCell id="c2" parent="1" style="swimlane;html=1;startSize=30;fontStyle=1;fontSize=14;fillColor=none;" value="Biểu đồ hoạt động – Xem và tải CV đã mở" vertex="1">
           <mxGeometry height="640" width="1240" x="40" y="20" as="geometry" />
         </mxCell>
         <mxCell id="c3" parent="1" style="swimlane;html=1;startSize=30;fontStyle=1;fontSize=13;fillColor=#f5f5f5;swimlaneFillColor=none;" value="Khách hàng" vertex="1">
@@ -1511,19 +1480,19 @@
         <mxCell id="c5" parent="1" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
           <mxGeometry height="30" width="30" x="195" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="c6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Mở mục &quot;CV đã sở hữu&quot;" vertex="1">
+        <mxCell id="c6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Vào mục &quot;CV đã mở&quot;" vertex="1">
           <mxGeometry height="50" width="150" x="135" y="155" as="geometry" />
         </mxCell>
-        <mxCell id="c7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Hiển thị danh sách CV đã mua kèm ngày mua" vertex="1">
+        <mxCell id="c7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Hiển thị danh sách CV đã mở kèm ngày mở" vertex="1">
           <mxGeometry height="56" width="190" x="665" y="152" as="geometry" />
         </mxCell>
         <mxCell id="c8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Chọn một CV" vertex="1">
           <mxGeometry height="50" width="150" x="135" y="255" as="geometry" />
         </mxCell>
-        <mxCell id="c9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Kiểm tra quyền sở hữu" vertex="1">
+        <mxCell id="c9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Kiểm tra quyền truy cập CV" vertex="1">
           <mxGeometry height="50" width="150" x="685" y="255" as="geometry" />
         </mxCell>
-        <mxCell id="c10" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="Đã sở hữu?" vertex="1">
+        <mxCell id="c10" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="Đã mở?" vertex="1">
           <mxGeometry height="76" width="140" x="690" y="342" as="geometry" />
         </mxCell>
         <mxCell id="c11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Từ chối truy cập" vertex="1">
@@ -1572,10 +1541,8 @@
           </mxGeometry>
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="QVCS9EgWQih7ITT5bnqn" name="AD 4.17 Thanh toán đơn hàng">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="QVCS9EgWQih7ITT5bnqn" name="AD 4.17 Thanh toán đơn hàng"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1749,10 +1716,8 @@
           </mxGeometry>
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="sdlJd4phYGcdycIOTmhZ" name="AD 4.18 Xem commission cá nhân">
-    <mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="sdlJd4phYGcdycIOTmhZ" name="AD 4.18 Xem commission cá nhân"><mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1829,10 +1794,8 @@
           </mxGeometry>
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="jOYKqXDWoJ2Xz1q8yqzQ" name="AD 4.19 Lấy link và xem KH đã giới thiệu">
-    <mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="jOYKqXDWoJ2Xz1q8yqzQ" name="AD 4.19 Lấy link và xem KH đã giới thiệu"><mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1860,7 +1823,7 @@
         <mxCell id="c9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Truy vấn khách hàng đăng ký qua link" vertex="1">
           <mxGeometry height="50" width="180" x="670" y="335" as="geometry" />
         </mxCell>
-        <mxCell id="c10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Hiển thị danh sách khách hàng, ngày đăng ký, trạng thái mua, hoa hồng Referral" vertex="1">
+        <mxCell id="c10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Hiển thị danh sách khách hàng, ngày đăng ký, trạng thái mở CV, hoa hồng Referral" vertex="1">
           <mxGeometry height="64" width="230" x="645" y="418" as="geometry" />
         </mxCell>
         <mxCell id="c11" parent="1" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
@@ -1894,14 +1857,12 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="yYuqdlSMie4VB1ZeHdWQ" name="AD 4.20 Cấu hình giá bán và tỷ lệ commission">
-    <mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="yYuqdlSMie4VB1ZeHdWQ" name="AD 4.20 Cấu hình phí mở CV và tỷ lệ commission"><mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="c2" parent="1" style="swimlane;html=1;startSize=30;fontStyle=1;fontSize=14;fillColor=none;" value="Biểu đồ hoạt động – Cấu hình giá bán và tỷ lệ commission" vertex="1">
+        <mxCell id="c2" parent="1" style="swimlane;html=1;startSize=30;fontStyle=1;fontSize=14;fillColor=none;" value="Biểu đồ hoạt động – Cấu hình phí mở CV và tỷ lệ commission" vertex="1">
           <mxGeometry height="620" width="1240" x="40" y="20" as="geometry" />
         </mxCell>
         <mxCell id="c3" parent="1" style="swimlane;html=1;startSize=30;fontStyle=1;fontSize=13;fillColor=#f5f5f5;swimlaneFillColor=none;" value="Admin" vertex="1">
@@ -1919,7 +1880,7 @@
         <mxCell id="c7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Hiển thị cấu hình hiện hành" vertex="1">
           <mxGeometry height="50" width="170" x="675" y="155" as="geometry" />
         </mxCell>
-        <mxCell id="c8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Nhập giá bán, số CV tối thiểu, tỷ lệ Source, Screener, Referral" vertex="1">
+        <mxCell id="c8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Nhập phí mở CV, số CV tối thiểu, tỷ lệ Source, Screener, Referral" vertex="1">
           <mxGeometry height="64" width="190" x="115" y="248" as="geometry" />
         </mxCell>
         <mxCell id="c9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="Kiểm tra dữ liệu hợp lệ" vertex="1">
@@ -1975,10 +1936,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="mSCLIPtVdxdaHJIYVCTg" name="AD 4.21 Điều chỉnh Source/Screener">
-    <mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="mSCLIPtVdxdaHJIYVCTg" name="AD 4.21 Điều chỉnh Source/Screener"><mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -2042,18 +2001,14 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="xyoUu7kHf1G94u8aDgdh" name="AD 4.22 Xem báo cáo">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="xyoUu7kHf1G94u8aDgdh" name="AD 4.22 Xem báo cáo"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="SD 4.23 Đăng ký tài khoản" id="SD48ĐăngkýqualinkGT9344">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1945" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="SD 4.23 Đăng ký tài khoản" id="SD48ĐăngkýqualinkGT9344"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1945" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -2438,10 +2393,8 @@
           <mxGeometry height="20" width="263" x="114" y="1270" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="SD 4.24 Đăng nhập" id="d7689d03106">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="SD 4.24 Đăng nhập" id="d7689d03106"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -2708,10 +2661,8 @@
           <mxGeometry height="20" width="339" x="136" y="611" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="SD 4.25 Quản lý TK nội bộ" id="db450f44e11">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="2809" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="SD 4.25 Quản lý TK nội bộ" id="db450f44e11"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="2809" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -3224,10 +3175,8 @@
           <mxGeometry height="20" width="210" x="150" y="1975" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="D_01UshaeiGvYq7BIcCg" name="SD 4.26 Tạo / Nộp CV">
-    <mxGraphModel dx="1413" dy="1230" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="D_01UshaeiGvYq7BIcCg" name="SD 4.26 Tạo / Nộp CV"><mxGraphModel dx="1413" dy="1230" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -3456,10 +3405,8 @@
           <mxGeometry height="20" width="171" x="86" y="902" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="SD 4.27 Sàng lọc CV" id="SD49SànglọcCV9440">
-    <mxGraphModel dx="2203" dy="1918" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="SD 4.27 Sàng lọc CV" id="SD49SànglọcCV9440"><mxGraphModel dx="2203" dy="1918" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -3901,10 +3848,8 @@
           <mxGeometry height="20" width="141" x="86" y="2018" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="JMOAmr7U68X5j27R8Hbx" name="SD 4.28 Cập nhật Open to Work">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="JMOAmr7U68X5j27R8Hbx" name="SD 4.28 Cập nhật Open to Work"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -4145,10 +4090,8 @@
           <mxGeometry height="20" width="118" x="72" y="1114" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="ATrWN-gt77zae3eMjkKD" name="SD 4.29 Tìm kiếm và xem preview CV">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="ATrWN-gt77zae3eMjkKD" name="SD 4.29 Tìm kiếm và xem preview CV"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -4274,7 +4217,7 @@
             <mxPoint x="757" y="499" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="c29" parent="1" style="text;html=1;fontSize=11;align=left;verticalAlign=middle;whiteSpace=wrap;" value="Ẩn thông tin liên hệ, đánh dấu CV đã sở hữu" vertex="1">
+        <mxCell id="c29" parent="1" style="text;html=1;fontSize=11;align=left;verticalAlign=middle;whiteSpace=wrap;" value="Ẩn thông tin liên hệ, đánh dấu CV đã mở" vertex="1">
           <mxGeometry height="24" width="180" x="798" y="431" as="geometry" />
         </mxCell>
         <mxCell id="c30" parent="1" style="text;html=1;fontSize=11;align=left;verticalAlign=middle;whiteSpace=wrap;fontColor=#555555;" value="Danh sách field công khai" vertex="1">
@@ -4347,10 +4290,8 @@
           <mxGeometry height="20" width="148" x="72" y="876" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="SD 4.30 Tạo đơn hàng" id="SD410Tạođơnhàng5984">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="SD 4.30 Tạo đơn hàng" id="SD410Tạođơnhàng5984"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -4447,7 +4388,7 @@
             <mxPoint x="783" y="279" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="c26" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=block;endFill=1;endSize=10;" value="Kiểm tra CV khả dụng, chưa sở hữu">
+        <mxCell id="c26" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=block;endFill=1;endSize=10;" value="Kiểm tra CV khả dụng, chưa mở">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="797" y="323" as="sourcePoint" />
             <mxPoint x="1103" y="323" as="targetPoint" />
@@ -4494,7 +4435,7 @@
             <mxPoint x="1103" y="543" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="c34" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=open;dashed=1;endSize=10;" value="Giá bán, số CV tối thiểu">
+        <mxCell id="c34" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=open;dashed=1;endSize=10;" value="Phí mở CV, số CV tối thiểu">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1103" y="587" as="sourcePoint" />
             <mxPoint x="797" y="587" as="targetPoint" />
@@ -4575,14 +4516,12 @@
           <mxGeometry height="20" width="148" x="72" y="920" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="NxgRP-UxZ16l12B7m2gv" name="SD 4.31 Xem và tải CV đã sở hữu">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="NxgRP-UxZ16l12B7m2gv" name="SD 4.31 Xem và tải CV đã mở"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="c2" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;width=214;height=40;fontStyle=1;fontSize=14;fillColor=none;" value="Xem và tải CV đã sở hữu" vertex="1">
+        <mxCell id="c2" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;width=214;height=40;fontStyle=1;fontSize=14;fillColor=none;" value="Xem và tải CV đã mở" vertex="1">
           <mxGeometry height="1041" width="1130" x="20" y="20" as="geometry" />
         </mxCell>
         <mxCell id="c3" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontStyle=1;fontSize=13;whiteSpace=wrap;" value="Khách hàng" vertex="1">
@@ -4660,13 +4599,13 @@
         <mxCell id="c22" parent="1" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=#ffffff;" value="" vertex="1">
           <mxGeometry height="64" width="14" x="1013" y="691" as="geometry" />
         </mxCell>
-        <mxCell id="c23" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=block;endFill=1;endSize=10;" value="Mở mục &quot;CV đã sở hữu&quot;">
+        <mxCell id="c23" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=block;endFill=1;endSize=10;" value="Vào mục &quot;CV đã mở&quot;">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="157" y="235" as="sourcePoint" />
             <mxPoint x="433" y="235" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="c24" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=block;endFill=1;endSize=10;" value="Yêu cầu danh sách CV đã mua">
+        <mxCell id="c24" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=block;endFill=1;endSize=10;" value="Yêu cầu danh sách CV đã mở">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="447" y="279" as="sourcePoint" />
             <mxPoint x="723" y="279" as="targetPoint" />
@@ -4678,7 +4617,7 @@
             <mxPoint x="1013" y="323" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="c26" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=open;dashed=1;endSize=10;" value="Danh sách CV, ngày mua">
+        <mxCell id="c26" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=open;dashed=1;endSize=10;" value="Danh sách CV, ngày mở">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1013" y="367" as="sourcePoint" />
             <mxPoint x="737" y="367" as="targetPoint" />
@@ -4708,7 +4647,7 @@
             <mxPoint x="723" y="543" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="c31" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=block;endFill=1;endSize=10;" value="Kiểm tra quyền sở hữu">
+        <mxCell id="c31" edge="1" parent="1" style="html=1;verticalAlign=bottom;fontSize=11;endArrow=block;endFill=1;endSize=10;" value="Kiểm tra quyền truy cập CV">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="737" y="587" as="sourcePoint" />
             <mxPoint x="1013" y="587" as="targetPoint" />
@@ -4756,17 +4695,15 @@
             <mxPoint x="157" y="947" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="c39" parent="1" style="text;html=1;fontStyle=1;fontSize=12;align=left;verticalAlign=middle;fillColor=#ffffff;spacingLeft=3;spacingRight=3;" value="[Đã sở hữu]" vertex="1">
+        <mxCell id="c39" parent="1" style="text;html=1;fontStyle=1;fontSize=12;align=left;verticalAlign=middle;fillColor=#ffffff;spacingLeft=3;spacingRight=3;" value="[Đã mở]" vertex="1">
           <mxGeometry height="20" width="95" x="122" y="665" as="geometry" />
         </mxCell>
-        <mxCell id="c40" parent="1" style="text;html=1;fontStyle=1;fontSize=12;align=left;verticalAlign=middle;fillColor=#ffffff;spacingLeft=3;spacingRight=3;" value="[Không sở hữu]" vertex="1">
+        <mxCell id="c40" parent="1" style="text;html=1;fontStyle=1;fontSize=12;align=left;verticalAlign=middle;fillColor=#ffffff;spacingLeft=3;spacingRight=3;" value="[Chưa mở]" vertex="1">
           <mxGeometry height="20" width="118" x="72" y="868" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="qDqzycVUAJKv6Os0M9a6" name="SD 4.32 Thanh toán đơn hàng">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="qDqzycVUAJKv6Os0M9a6" name="SD 4.32 Thanh toán đơn hàng"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -5160,10 +5097,8 @@
           <mxGeometry height="20" width="278" x="136" y="1351" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="ElfxrUiS0feLMB9rzAS6" name="SD 4.33 Xem commission cá nhân">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="ElfxrUiS0feLMB9rzAS6" name="SD 4.33 Xem commission cá nhân"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -5362,10 +5297,8 @@
           <mxGeometry height="20" width="164" x="72" y="876" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="swKtiYaV26qPy-XePJo1" name="SD 4.34 Lấy link và xem KH đã giới thiệu">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="swKtiYaV26qPy-XePJo1" name="SD 4.34 Lấy link và xem KH đã giới thiệu"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -5511,14 +5444,12 @@
           </mxGeometry>
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="MAua-QiO8E7fOprEPXcU" name="SD 4.35 Cấu hình giá bán và tỷ lệ commission">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="MAua-QiO8E7fOprEPXcU" name="SD 4.35 Cấu hình phí mở CV và tỷ lệ commission"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="c2" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;width=318;height=40;fontStyle=1;fontSize=14;fillColor=none;" value="Cấu hình giá bán và tỷ lệ commission" vertex="1">
+        <mxCell id="c2" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;width=318;height=40;fontStyle=1;fontSize=14;fillColor=none;" value="Cấu hình phí mở CV và tỷ lệ commission" vertex="1">
           <mxGeometry height="1049" width="1220" x="20" y="20" as="geometry" />
         </mxCell>
         <mxCell id="c3" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontStyle=1;fontSize=13;whiteSpace=wrap;" value="Admin" vertex="1">
@@ -5713,10 +5644,8 @@
           <mxGeometry height="20" width="118" x="72" y="876" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="lOvEB28KauUntgaRm9Nj" name="SD 4.36 Điều chỉnh Source/Screener">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="lOvEB28KauUntgaRm9Nj" name="SD 4.36 Điều chỉnh Source/Screener"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -5874,10 +5803,8 @@
           </mxGeometry>
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="Au9l74ByOi2Fn_a2GzV_" name="SD 4.37 Xem báo cáo">
-    <mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="Au9l74ByOi2Fn_a2GzV_" name="SD 4.37 Xem báo cáo"><mxGraphModel grid="0" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -6022,10 +5949,8 @@
           </mxGeometry>
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram name="ERD 4.38" id="ERD4149328">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram name="ERD 4.38" id="ERD4149328"><mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -6369,10 +6294,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="euNJRvGl50J892X0RuJm" name="BPMN 3.1 TO-BE tổng quát">
-    <mxGraphModel dx="3027" dy="2873" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="euNJRvGl50J892X0RuJm" name="BPMN 3.1 TO-BE tổng quát"><mxGraphModel dx="3027" dy="2873" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -6590,7 +6513,7 @@
         <mxCell id="c60" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontStyle=2;fontSize=14;" value="Thành&lt;br&gt;công?" vertex="1">
           <mxGeometry height="36" width="50" x="2057" y="232" as="geometry" />
         </mxCell>
-        <mxCell id="c61" parent="1" style="shape=mxgraph.bpmn.task;whiteSpace=wrap;rectStyle=rounded;size=10;html=1;taskMarker=user;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;spacingTop=8;spacingLeft=4;spacingRight=4;fontSize=14;" value="Xem và tải CV đã mua" vertex="1">
+        <mxCell id="c61" parent="1" style="shape=mxgraph.bpmn.task;whiteSpace=wrap;rectStyle=rounded;size=10;html=1;taskMarker=user;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;spacingTop=8;spacingLeft=4;spacingRight=4;fontSize=14;" value="Xem và tải CV đã mở" vertex="1">
           <mxGeometry height="64" width="140" x="2100" y="263" as="geometry" />
         </mxCell>
         <mxCell id="c62" parent="1" style="shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;labelBackgroundColor=none;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;aspect=fixed;fontSize=14;outline=end;symbol=general;fillColor=#f8cecc;strokeColor=#b85450;" value="" vertex="1">
@@ -6810,10 +6733,8 @@
           </mxGeometry>
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="uDNnnX5cWqcT2qFr2r8i" name="Kiến trúc 4.57">
-    <mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    </mxGraphModel></diagram>
+  <diagram id="uDNnnX5cWqcT2qFr2r8i" name="Kiến trúc 4.57"><mxGraphModel dx="454" dy="431" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -6862,7 +6783,7 @@
         <mxCell id="c16" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" value="&lt;b&gt;Cơ sở dữ liệu quan hệ&lt;/b&gt;&lt;br&gt;13 thực thể (mục 4.8)" vertex="1">
           <mxGeometry height="85" width="250" x="190" y="650" as="geometry" />
         </mxCell>
-        <mxCell id="c17" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" value="&lt;b&gt;Lưu trữ file CV&lt;/b&gt;&lt;br&gt;Truy cập theo quyền sở hữu" vertex="1">
+        <mxCell id="c17" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;" value="&lt;b&gt;Lưu trữ file CV&lt;/b&gt;&lt;br&gt;Truy cập theo quyền đã mở CV" vertex="1">
           <mxGeometry height="85" width="250" x="470" y="650" as="geometry" />
         </mxCell>
         <mxCell id="c18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontSize=14;fillColor=none;strokeColor=#999999;dashed=1;" value="Hệ thống bên ngoài" vertex="1">
@@ -6925,6 +6846,5 @@
           <mxGeometry height="24" width="200" x="955" y="488" as="geometry" />
         </mxCell>
       </root>
-    </mxGraphModel>
-  </diagram>
+    </mxGraphModel></diagram>
 </mxfile>
