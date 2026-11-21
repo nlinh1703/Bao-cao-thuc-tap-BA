@@ -8,6 +8,7 @@
 | Sinh viên thực hiện | Nguyễn Thị Nhật Linh – MSSV: 036305000092 |
 | Giảng viên hướng dẫn | ThS. Mai Ngọc Châu |
 | Cán bộ hướng dẫn tại doanh nghiệp | ThS. Nguyễn Ngọc Hương Trâm – CEO Công ty Light Human |
+| Repository GitHub | https://github.com/nlinh1703/Bao-cao-thuc-tap-BA |
 | Demo trực tuyến | https://nlinh1703.github.io/Bao-cao-thuc-tap-BA/Code/ |
 
 ## Giới thiệu
